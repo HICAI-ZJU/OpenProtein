@@ -1,0 +1,37 @@
+openprotein.task package
+========================
+
+Submodules
+----------
+
+openprotein.task.ec module
+--------------------------
+
+.. automodule:: openprotein.task.ec
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+openprotein.task.flip module
+----------------------------
+
+.. automodule:: openprotein.task.flip
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+openprotein.task.tape module
+----------------------------
+
+.. automodule:: openprotein.task.tape
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: openprotein.task
+   :members:
+   :undoc-members:
+   :show-inheritance:

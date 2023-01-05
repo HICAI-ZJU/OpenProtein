@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openprotein.models.esm1b &mdash; open-protein  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> open-protein
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../QuickStart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.data.html">data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.datasets.html">datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.models.html">models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.task.html">task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.utils.html">utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">open-protein</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">openprotein.models.esm1b</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for openprotein.models.esm1b</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">Parameter</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">LayerNorm</span> <span class="k">as</span> <span class="n">ESM1bLayerNorm</span>
+
+<span class="n">proteinseq_toks</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;toks&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="gelu"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.gelu">[docs]</a><span class="k">def</span> <span class="nf">gelu</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implementation of the gelu activation function.</span>
+
+<span class="sd">    For information: OpenAI GPT&#39;s gelu is slightly different</span>
+<span class="sd">    (and gives slightly different results):</span>
+<span class="sd">    0.5 * x * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="utils_softmax"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.utils_softmax">[docs]</a><span class="k">def</span> <span class="nf">utils_softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">onnx_trace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">onnx_trace</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FairseqIncrementalState"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.FairseqIncrementalState">[docs]</a><span class="k">class</span> <span class="nc">FairseqIncrementalState</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_incremental_state</span><span class="p">()</span>
+
+<div class="viewcode-block" id="FairseqIncrementalState.init_incremental_state"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.FairseqIncrementalState.init_incremental_state">[docs]</a>    <span class="k">def</span> <span class="nf">init_incremental_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_incremental_state_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_full_incremental_state_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_incremental_state_id</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FairseqIncrementalState.get_incremental_state"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.FairseqIncrementalState.get_incremental_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_incremental_state</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">incremental_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]],</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]:</span>
+        <span class="sd">&quot;&quot;&quot;Helper for getting incremental state for an nn.Module.&quot;&quot;&quot;</span>
+        <span class="n">full_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_full_incremental_state_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">incremental_state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">full_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">incremental_state</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">incremental_state</span><span class="p">[</span><span class="n">full_key</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="FairseqIncrementalState.set_incremental_state"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.FairseqIncrementalState.set_incremental_state">[docs]</a>    <span class="k">def</span> <span class="nf">set_incremental_state</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">incremental_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]],</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">value</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]]:</span>
+        <span class="sd">&quot;&quot;&quot;Helper for setting incremental state for an nn.Module.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">incremental_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">full_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_full_incremental_state_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">incremental_state</span><span class="p">[</span><span class="n">full_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">incremental_state</span></div></div>
+
+
+<div class="viewcode-block" id="with_incremental_state"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.with_incremental_state">[docs]</a><span class="k">def</span> <span class="nf">with_incremental_state</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span> <span class="o">=</span> <span class="p">(</span><span class="n">FairseqIncrementalState</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span> <span class="k">if</span> <span class="n">b</span> <span class="o">!=</span> <span class="n">FairseqIncrementalState</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="bp">cls</span></div>
+
+
+<div class="viewcode-block" id="MultiheadAttention"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.MultiheadAttention">[docs]</a><span class="nd">@with_incremental_state</span>
+<span class="k">class</span> <span class="nc">MultiheadAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Multi-headed attention.</span>
+
+<span class="sd">    See &quot;Attention Is All You Need&quot; for more details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">embed_dim</span><span class="p">,</span>
+            <span class="n">num_heads</span><span class="p">,</span>
+            <span class="n">kdim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">vdim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">dropout</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">add_bias_kv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">add_zero_attn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">self_attention</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">encoder_decoder_attention</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="n">embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kdim</span> <span class="o">=</span> <span class="n">kdim</span> <span class="k">if</span> <span class="n">kdim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vdim</span> <span class="o">=</span> <span class="n">vdim</span> <span class="k">if</span> <span class="n">vdim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qkv_same_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kdim</span> <span class="o">==</span> <span class="n">embed_dim</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">vdim</span> <span class="o">==</span> <span class="n">embed_dim</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span> <span class="o">=</span> <span class="n">num_heads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">dropout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span> <span class="o">=</span> <span class="n">embed_dim</span> <span class="o">//</span> <span class="n">num_heads</span>
+        <span class="k">assert</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span> <span class="o">*</span> <span class="n">num_heads</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span>
+        <span class="p">),</span> <span class="s2">&quot;embed_dim must be divisible by num_heads&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">self_attention</span> <span class="o">=</span> <span class="n">self_attention</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder_decoder_attention</span> <span class="o">=</span> <span class="n">encoder_decoder_attention</span>
+
+        <span class="k">assert</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_attention</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">qkv_same_dim</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s2">&quot;Self-attention requires query, key and &quot;</span> <span class="s2">&quot;value to be of the same size&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kdim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vdim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">add_bias_kv</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias_k</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_zero_attn</span> <span class="o">=</span> <span class="n">add_zero_attn</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_parameters</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">onnx_trace</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_torch_version</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="s2">&quot;multi_head_attention_forward&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enable_torch_version</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enable_torch_version</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="MultiheadAttention.prepare_for_onnx_export_"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.MultiheadAttention.prepare_for_onnx_export_">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_onnx_export_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">onnx_trace</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="MultiheadAttention.reset_parameters"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.MultiheadAttention.reset_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">reset_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qkv_same_dim</span><span class="p">:</span>
+            <span class="c1"># Empirically observed the convergence to be much better with</span>
+            <span class="c1"># the scaled initialization</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_proj</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_proj</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_normal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bias_k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_normal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MultiheadAttention.forward"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.MultiheadAttention.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">query</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">],</span>
+            <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">],</span>
+            <span class="n">key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">incremental_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">need_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">static_kv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">attn_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">before_softmax</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">need_head_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Input shape: Time x Batch x Channel</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key_padding_mask (ByteTensor, optional): mask to exclude</span>
+<span class="sd">                keys that are pads, of shape `(batch, src_len)`, where</span>
+<span class="sd">                padding elements are indicated by 1s.</span>
+<span class="sd">            need_weights (bool, optional): return the attention weights,</span>
+<span class="sd">                averaged over heads (default: False).</span>
+<span class="sd">            attn_mask (ByteTensor, optional): typically used to</span>
+<span class="sd">                implement causal attention, where the mask prevents the</span>
+<span class="sd">                attention from looking forward in time (default: None).</span>
+<span class="sd">            before_softmax (bool, optional): return the raw attention</span>
+<span class="sd">                weights and values before the attention softmax.</span>
+<span class="sd">            need_head_weights (bool, optional): return the attention</span>
+<span class="sd">                weights for each head. Implies *need_weights*. Default:</span>
+<span class="sd">                return the average attention weights over all heads.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">need_head_weights</span><span class="p">:</span>
+            <span class="n">need_weights</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">tgt_len</span><span class="p">,</span> <span class="n">bsz</span><span class="p">,</span> <span class="n">embed_dim</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">embed_dim</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span>
+        <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span><span class="n">tgt_len</span><span class="p">,</span> <span class="n">bsz</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enable_torch_version</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">onnx_trace</span>
+                <span class="ow">and</span> <span class="n">incremental_state</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">static_kv</span>
+                <span class="c1"># A workaround for quantization to work. Otherwise JIT compilation</span>
+                <span class="c1"># treats bias in linear module as method.</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">is_scripting</span><span class="p">()</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">need_head_weights</span>
+        <span class="p">):</span>
+            <span class="k">assert</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">multi_head_attention_forward</span><span class="p">(</span>
+                <span class="n">query</span><span class="p">,</span>
+                <span class="n">key</span><span class="p">,</span>
+                <span class="n">value</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">q_proj</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_proj</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_proj</span><span class="o">.</span><span class="n">bias</span><span class="p">)),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bias_k</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_zero_attn</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_proj</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">,</span>
+                <span class="n">key_padding_mask</span><span class="p">,</span>
+                <span class="n">need_weights</span><span class="p">,</span>
+                <span class="n">attn_mask</span><span class="p">,</span>
+                <span class="n">use_separate_proj_weight</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">q_proj_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">q_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
+                <span class="n">k_proj_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
+                <span class="n">v_proj_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">v_proj</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">incremental_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">saved_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_input_buffer</span><span class="p">(</span><span class="n">incremental_state</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">saved_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;prev_key&quot;</span> <span class="ow">in</span> <span class="n">saved_state</span><span class="p">:</span>
+                <span class="c1"># previous time steps are cached - no need to recompute</span>
+                <span class="c1"># key and value if they are static</span>
+                <span class="k">if</span> <span class="n">static_kv</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder_decoder_attention</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_attention</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">saved_state</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_attention</span><span class="p">:</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_proj</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_proj</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_proj</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder_decoder_attention</span><span class="p">:</span>
+            <span class="c1"># encoder-decoder attention</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_proj</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">v</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_proj</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_proj</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_proj</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_proj</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_proj</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_k</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bsz</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_v</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bsz</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+            <span class="k">if</span> <span class="n">attn_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">attn_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">attn_mask</span><span class="p">,</span> <span class="n">attn_mask</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="n">attn_mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">key_padding_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">key_padding_mask</span><span class="p">,</span>
+                        <span class="n">key_padding_mask</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="n">key_padding_mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="p">],</span>
+                    <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">tgt_len</span><span class="p">,</span> <span class="n">bsz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">bsz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">bsz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">saved_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># saved states are stored with shape (bsz, num_heads, seq_len, head_dim)</span>
+            <span class="k">if</span> <span class="s2">&quot;prev_key&quot;</span> <span class="ow">in</span> <span class="n">saved_state</span><span class="p">:</span>
+                <span class="n">_prev_key</span> <span class="o">=</span> <span class="n">saved_state</span><span class="p">[</span><span class="s2">&quot;prev_key&quot;</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">_prev_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="n">prev_key</span> <span class="o">=</span> <span class="n">_prev_key</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">bsz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">static_kv</span><span class="p">:</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">prev_key</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">prev_key</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;prev_value&quot;</span> <span class="ow">in</span> <span class="n">saved_state</span><span class="p">:</span>
+                <span class="n">_prev_value</span> <span class="o">=</span> <span class="n">saved_state</span><span class="p">[</span><span class="s2">&quot;prev_value&quot;</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">_prev_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="n">prev_value</span> <span class="o">=</span> <span class="n">_prev_value</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">bsz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">static_kv</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">prev_value</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">prev_value</span><span class="p">,</span> <span class="n">v</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">prev_key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="s2">&quot;prev_key_padding_mask&quot;</span> <span class="ow">in</span> <span class="n">saved_state</span><span class="p">:</span>
+                <span class="n">prev_key_padding_mask</span> <span class="o">=</span> <span class="n">saved_state</span><span class="p">[</span><span class="s2">&quot;prev_key_padding_mask&quot;</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">key_padding_mask</span> <span class="o">=</span> <span class="n">MultiheadAttention</span><span class="o">.</span><span class="n">_append_prev_key_padding_mask</span><span class="p">(</span>
+                <span class="n">key_padding_mask</span><span class="o">=</span><span class="n">key_padding_mask</span><span class="p">,</span>
+                <span class="n">prev_key_padding_mask</span><span class="o">=</span><span class="n">prev_key_padding_mask</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">bsz</span><span class="p">,</span>
+                <span class="n">src_len</span><span class="o">=</span><span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                <span class="n">static_kv</span><span class="o">=</span><span class="n">static_kv</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">saved_state</span><span class="p">[</span><span class="s2">&quot;prev_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">bsz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span>
+            <span class="n">saved_state</span><span class="p">[</span><span class="s2">&quot;prev_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">bsz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span>
+            <span class="n">saved_state</span><span class="p">[</span><span class="s2">&quot;prev_key_padding_mask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key_padding_mask</span>
+            <span class="c1"># In this branch incremental_state is never None</span>
+            <span class="k">assert</span> <span class="n">incremental_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">incremental_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_input_buffer</span><span class="p">(</span><span class="n">incremental_state</span><span class="p">,</span> <span class="n">saved_state</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">src_len</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># This is part of a workaround to get around fork/join parallelism</span>
+        <span class="c1"># not supporting Optional types.</span>
+        <span class="k">if</span> <span class="n">key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">key_padding_mask</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">key_padding_mask</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">key_padding_mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">bsz</span>
+            <span class="k">assert</span> <span class="n">key_padding_mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">src_len</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_zero_attn</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">src_len</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">((</span><span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">:])],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">((</span><span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">:])],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">attn_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">attn_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">attn_mask</span><span class="p">,</span> <span class="n">attn_mask</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="n">attn_mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">key_padding_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">key_padding_mask</span><span class="p">,</span>
+                        <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">key_padding_mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">key_padding_mask</span><span class="p">),</span>
+                    <span class="p">],</span>
+                    <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">MultiheadAttention</span><span class="o">.</span><span class="n">apply_sparse_mask</span><span class="p">(</span><span class="n">attn_weights</span><span class="p">,</span> <span class="n">tgt_len</span><span class="p">,</span> <span class="n">src_len</span><span class="p">,</span> <span class="n">bsz</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">attn_weights</span><span class="o">.</span><span class="n">size</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span><span class="n">bsz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">tgt_len</span><span class="p">,</span> <span class="n">src_len</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">attn_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attn_mask</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">attn_mask</span> <span class="o">=</span> <span class="n">attn_mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">onnx_trace</span><span class="p">:</span>
+                <span class="n">attn_mask</span> <span class="o">=</span> <span class="n">attn_mask</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">attn_weights</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">attn_weights</span> <span class="o">+=</span> <span class="n">attn_mask</span>
+
+        <span class="k">if</span> <span class="n">key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># don&#39;t attend to padding symbols</span>
+            <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">bsz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">tgt_len</span><span class="p">,</span> <span class="n">src_len</span><span class="p">)</span>
+            <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">masked_fill</span><span class="p">(</span>
+                <span class="n">key_padding_mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">bsz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">tgt_len</span><span class="p">,</span> <span class="n">src_len</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">before_softmax</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">attn_weights</span><span class="p">,</span> <span class="n">v</span>
+
+        <span class="n">attn_weights_float</span> <span class="o">=</span> <span class="n">utils_softmax</span><span class="p">(</span><span class="n">attn_weights</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">onnx_trace</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onnx_trace</span><span class="p">)</span>
+        <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights_float</span><span class="o">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">attn_weights</span><span class="p">)</span>
+        <span class="n">attn_probs</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span>
+            <span class="n">attn_weights_float</span><span class="o">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">attn_weights</span><span class="p">),</span>
+            <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">,</span>
+            <span class="n">training</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">attn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">attn_probs</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">attn</span><span class="o">.</span><span class="n">size</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span><span class="n">bsz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">tgt_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">onnx_trace</span> <span class="ow">and</span> <span class="n">attn</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># when ONNX tracing a single decoder step (sequence length == 1)</span>
+            <span class="c1"># the transpose is a no-op copy before view, thus unnecessary</span>
+            <span class="n">attn</span> <span class="o">=</span> <span class="n">attn</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">tgt_len</span><span class="p">,</span> <span class="n">bsz</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">attn</span> <span class="o">=</span> <span class="n">attn</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">tgt_len</span><span class="p">,</span> <span class="n">bsz</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">)</span>
+        <span class="n">attn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_proj</span><span class="p">(</span><span class="n">attn</span><span class="p">)</span>
+        <span class="n">attn_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">need_weights</span><span class="p">:</span>
+            <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights_float</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
+                <span class="n">bsz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">tgt_len</span><span class="p">,</span> <span class="n">src_len</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">need_head_weights</span><span class="p">:</span>
+                <span class="c1"># average attention weights over heads</span>
+                <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">attn</span><span class="p">,</span> <span class="n">attn_weights</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_append_prev_key_padding_mask</span><span class="p">(</span>
+            <span class="n">key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">],</span>
+            <span class="n">prev_key_padding_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">],</span>
+            <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">src_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">static_kv</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]:</span>
+        <span class="c1"># saved key padding masks have shape (bsz, seq_len)</span>
+        <span class="k">if</span> <span class="n">prev_key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">static_kv</span><span class="p">:</span>
+            <span class="n">new_key_padding_mask</span> <span class="o">=</span> <span class="n">prev_key_padding_mask</span>
+        <span class="k">elif</span> <span class="n">prev_key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_key_padding_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">prev_key_padding_mask</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">key_padding_mask</span><span class="o">.</span><span class="n">float</span><span class="p">()],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+        <span class="c1"># During incremental decoding, as the padding token enters and</span>
+        <span class="c1"># leaves the frame, there will be a time when prev or current</span>
+        <span class="c1"># is None</span>
+        <span class="k">elif</span> <span class="n">prev_key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">src_len</span> <span class="o">-</span> <span class="n">prev_key_padding_mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">prev_key_padding_mask</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">new_key_padding_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">prev_key_padding_mask</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">filler</span><span class="o">.</span><span class="n">float</span><span class="p">()],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key_padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">src_len</span> <span class="o">-</span> <span class="n">key_padding_mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">key_padding_mask</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">new_key_padding_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">filler</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">key_padding_mask</span><span class="o">.</span><span class="n">float</span><span class="p">()],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_key_padding_mask</span> <span class="o">=</span> <span class="n">prev_key_padding_mask</span>
+        <span class="k">return</span> <span class="n">new_key_padding_mask</span>
+
+<div class="viewcode-block" id="MultiheadAttention.reorder_incremental_state"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.MultiheadAttention.reorder_incremental_state">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">export</span>
+    <span class="k">def</span> <span class="nf">reorder_incremental_state</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">incremental_state</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]],</span> <span class="n">new_order</span><span class="p">:</span> <span class="n">Tensor</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reorder buffered internal state (for incremental generation).&quot;&quot;&quot;</span>
+        <span class="n">input_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_input_buffer</span><span class="p">(</span><span class="n">incremental_state</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">input_buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">input_buffer</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">input_buffer_k</span> <span class="o">=</span> <span class="n">input_buffer</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">input_buffer_k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder_decoder_attention</span> <span class="ow">and</span> <span class="n">input_buffer_k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">new_order</span><span class="o">.</span><span class="n">size</span><span class="p">(</span>
+                            <span class="mi">0</span>
+                    <span class="p">):</span>
+                        <span class="k">break</span>
+                    <span class="n">input_buffer</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_buffer_k</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">new_order</span><span class="p">)</span>
+            <span class="n">incremental_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_input_buffer</span><span class="p">(</span><span class="n">incremental_state</span><span class="p">,</span> <span class="n">input_buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">incremental_state</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_input_buffer</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">incremental_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_incremental_state</span><span class="p">(</span><span class="n">incremental_state</span><span class="p">,</span> <span class="s2">&quot;attn_state&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">empty_result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">return</span> <span class="n">empty_result</span>
+
+    <span class="k">def</span> <span class="nf">_set_input_buffer</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">incremental_state</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]],</span>
+            <span class="n">buffer</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]],</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_incremental_state</span><span class="p">(</span><span class="n">incremental_state</span><span class="p">,</span> <span class="s2">&quot;attn_state&quot;</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultiheadAttention.apply_sparse_mask"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.MultiheadAttention.apply_sparse_mask">[docs]</a>    <span class="k">def</span> <span class="nf">apply_sparse_mask</span><span class="p">(</span><span class="n">attn_weights</span><span class="p">,</span> <span class="n">tgt_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">src_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bsz</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">attn_weights</span></div>
+
+<div class="viewcode-block" id="MultiheadAttention.upgrade_state_dict_named"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.MultiheadAttention.upgrade_state_dict_named">[docs]</a>    <span class="k">def</span> <span class="nf">upgrade_state_dict_named</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">items_to_add</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">keys_to_remove</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">state_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;in_proj_weight&quot;</span><span class="p">):</span>
+                <span class="c1"># in_proj_weight used to be q + k + v with same dimensions</span>
+                <span class="n">dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">state_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="n">items_to_add</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;q_proj.weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">k</span><span class="p">][:</span><span class="n">dim</span><span class="p">]</span>
+                <span class="n">items_to_add</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;k_proj.weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">dim</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dim</span><span class="p">]</span>
+                <span class="n">items_to_add</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;v_proj.weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dim</span><span class="p">:]</span>
+
+                <span class="n">keys_to_remove</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+                <span class="n">k_bias</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;in_proj_bias&quot;</span>
+                <span class="k">if</span> <span class="n">k_bias</span> <span class="ow">in</span> <span class="n">state_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">state_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+                    <span class="n">items_to_add</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;q_proj.bias&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">k_bias</span><span class="p">][:</span><span class="n">dim</span><span class="p">]</span>
+                    <span class="n">items_to_add</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;k_proj.bias&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">k_bias</span><span class="p">][</span><span class="n">dim</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dim</span><span class="p">]</span>
+                    <span class="n">items_to_add</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;v_proj.bias&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">k_bias</span><span class="p">][</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dim</span><span class="p">:]</span>
+
+                    <span class="n">keys_to_remove</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;in_proj_bias&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys_to_remove</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">items_to_add</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">state_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div></div>
+
+
+<div class="viewcode-block" id="LearnedPositionalEmbedding"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.LearnedPositionalEmbedding">[docs]</a><span class="k">class</span> <span class="nc">LearnedPositionalEmbedding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This module learns positional embeddings up to a fixed maximum size.</span>
+<span class="sd">    Padding ids are ignored by either offsetting based on padding_idx</span>
+<span class="sd">    or by setting padding_idx to None and ensuring that the appropriate</span>
+<span class="sd">    position ids are passed to the forward function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_embeddings</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">padding_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">padding_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">num_embeddings_</span> <span class="o">=</span> <span class="n">num_embeddings</span> <span class="o">+</span> <span class="n">padding_idx</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">num_embeddings_</span> <span class="o">=</span> <span class="n">num_embeddings</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_embeddings_</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">padding_idx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_positions</span> <span class="o">=</span> <span class="n">num_embeddings</span>
+
+<div class="viewcode-block" id="LearnedPositionalEmbedding.forward"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.LearnedPositionalEmbedding.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Input is expected to be of size [bsz x seqlen].&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">input</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_positions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Sequence length </span><span class="si">{</span><span class="nb">input</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2"> above maximum &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; sequence length of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_positions</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span><span class="p">)</span><span class="o">.</span><span class="n">int</span><span class="p">()</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">*</span> <span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span>
+            <span class="n">positions</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_norm</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_type</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scale_grad_by_freq</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sparse</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TransformerLayer"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.TransformerLayer">[docs]</a><span class="k">class</span> <span class="nc">TransformerLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transformer layer block.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">embed_dim</span><span class="p">,</span>
+            <span class="n">ffn_embed_dim</span><span class="p">,</span>
+            <span class="n">attention_heads</span><span class="p">,</span>
+            <span class="n">add_bias_kv</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="n">embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ffn_embed_dim</span> <span class="o">=</span> <span class="n">ffn_embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attention_heads</span> <span class="o">=</span> <span class="n">attention_heads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_submodules</span><span class="p">(</span><span class="n">add_bias_kv</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_init_submodules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">add_bias_kv</span><span class="p">):</span>
+        <span class="n">BertLayerNorm</span> <span class="o">=</span> <span class="n">ESM1bLayerNorm</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">self_attn</span> <span class="o">=</span> <span class="n">MultiheadAttention</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attention_heads</span><span class="p">,</span>
+            <span class="n">add_bias_kv</span><span class="o">=</span><span class="n">add_bias_kv</span><span class="p">,</span>
+            <span class="n">add_zero_attn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">self_attn_layer_norm</span> <span class="o">=</span> <span class="n">BertLayerNorm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ffn_embed_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ffn_embed_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_layer_norm</span> <span class="o">=</span> <span class="n">BertLayerNorm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">)</span>
+        <span class="c1"># self.layer_gated = nn.Linear(self.embed_dim, 1, bias=False)</span>
+
+<div class="viewcode-block" id="TransformerLayer.forward"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.TransformerLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">self_attn_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">self_attn_padding_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">need_head_weights</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_attn_layer_norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">attn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_attn</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+            <span class="n">key_padding_mask</span><span class="o">=</span><span class="n">self_attn_padding_mask</span><span class="p">,</span>
+            <span class="n">need_weights</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">need_head_weights</span><span class="o">=</span><span class="n">need_head_weights</span><span class="p">,</span>
+            <span class="n">attn_mask</span><span class="o">=</span><span class="n">self_attn_mask</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">+</span> <span class="n">x</span>
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_layer_norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">gelu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">+</span> <span class="n">x</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">attn</span></div></div>
+
+
+<div class="viewcode-block" id="ProteinBertModel"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.ProteinBertModel">[docs]</a><span class="k">class</span> <span class="nc">ProteinBertModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        RoBERTa Large architecture for encoding protein sequence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            layer_num (int, default=33): number of layers</span>
+<span class="sd">            embed_dim (int, default=1280): embedding dimension</span>
+<span class="sd">            ffn_embed_dim (int, default=5120): embedding dimension for feedforward network</span>
+<span class="sd">            attention_head_num (int, default=20): number of attention heads</span>
+<span class="sd">            max_position_num (int, default=1024): number of positional embeddings to learn</span>
+<span class="sd">            emb_layer_norm_before (bool, default=True): whether apply layer norm before multi-head attentions</span>
+<span class="sd">            checkpoint_path (str): the path of pre-trained checkpoint</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_position_num</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">max_positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_num</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">num_layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attention_head_num</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">attention_heads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ffn_embed_dim</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ffn_embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alphabet</span> <span class="o">=</span> <span class="n">alphabet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alphabet_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">alphabet</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span> <span class="o">=</span> <span class="n">alphabet</span><span class="o">.</span><span class="n">padding_idx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_idx</span> <span class="o">=</span> <span class="n">alphabet</span><span class="o">.</span><span class="n">mask_idx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cls_idx</span> <span class="o">=</span> <span class="n">alphabet</span><span class="o">.</span><span class="n">cls_idx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eos_idx</span> <span class="o">=</span> <span class="n">alphabet</span><span class="o">.</span><span class="n">eos_idx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepend_bos</span> <span class="o">=</span> <span class="n">alphabet</span><span class="o">.</span><span class="n">prepend_bos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_eos</span> <span class="o">=</span> <span class="n">alphabet</span><span class="o">.</span><span class="n">append_eos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emb_layer_norm_before</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;emb_layer_norm_before&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_tokens</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alphabet_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">padding_idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">TransformerLayer</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ffn_embed_dim</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">attention_head_num</span><span class="p">,</span>
+                    <span class="n">add_bias_kv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_num</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_scale</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_positions</span> <span class="o">=</span> <span class="n">LearnedPositionalEmbedding</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_position_num</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emb_layer_norm_before</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">ESM1bLayerNorm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_layer_norm_before</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emb_layer_norm_after</span> <span class="o">=</span> <span class="n">ESM1bLayerNorm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ProteinBertModel.forward"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.ProteinBertModel.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">attn_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repr_layers</span><span class="o">=</span><span class="p">[],</span> <span class="n">need_head_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">tokens</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="n">padding_mask</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span><span class="p">)</span>  <span class="c1"># B, T</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_scale</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="s1">&#39;token_dropout&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">masked_fill_</span><span class="p">((</span><span class="n">tokens</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_idx</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="c1"># x: B x T x C</span>
+            <span class="n">mask_ratio_train</span> <span class="o">=</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="mf">0.8</span>
+            <span class="n">src_lengths</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">padding_mask</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">mask_ratio_observed</span> <span class="o">=</span> <span class="p">(</span><span class="n">tokens</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_idx</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">/</span> <span class="n">src_lengths</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">mask_ratio_train</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">mask_ratio_observed</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_tokens</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_positions</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+
+        <span class="n">attention_mask</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span><span class="p">)</span> \
+            <span class="o">.</span><span class="n">repeat_interleave</span><span class="p">(</span><span class="n">tokens</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> \
+            <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tokens</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">tokens</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_layer_norm_before</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_layer_norm_before</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">padding_mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+        <span class="n">repr_layers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">repr_layers</span><span class="p">)</span>
+        <span class="n">hidden_representations</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">repr_layers</span><span class="p">:</span>
+            <span class="n">hidden_representations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="k">if</span> <span class="n">need_head_weights</span><span class="p">:</span>
+            <span class="n">attn_weights</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># (B, T, E) =&gt; (T, B, E)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">padding_mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">padding_mask</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">layer_idx</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">attn</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">self_attn_mask</span><span class="o">=</span><span class="n">attention_mask</span><span class="p">,</span> <span class="n">self_attn_padding_mask</span><span class="o">=</span><span class="n">padding_mask</span><span class="p">,</span>
+                <span class="n">need_head_weights</span><span class="o">=</span><span class="n">need_head_weights</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">layer_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">repr_layers</span><span class="p">:</span>
+                <span class="n">hidden_representations</span><span class="p">[</span><span class="n">layer_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">need_head_weights</span><span class="p">:</span>
+                <span class="c1"># (H, B, T, T) =&gt; (B, H, T, T)</span>
+                <span class="n">attn_weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">attn</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_layer_norm_after</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># (T, B, E) =&gt; (B, T, E)</span>
+        <span class="c1"># last hidden representation should have layer norm applied</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">layer_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">repr_layers</span><span class="p">:</span>
+            <span class="n">hidden_representations</span><span class="p">[</span><span class="n">layer_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;logits&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s2">&quot;representations&quot;</span><span class="p">:</span> <span class="n">hidden_representations</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">need_head_weights</span><span class="p">:</span>
+            <span class="c1"># attentions: B x L x H x T x T</span>
+            <span class="n">attentions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">attn_weights</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">padding_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">attention_mask</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">padding_mask</span><span class="o">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">attentions</span><span class="p">)</span>
+                <span class="n">attention_mask</span> <span class="o">=</span> <span class="n">attention_mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">attention_mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">attentions</span> <span class="o">=</span> <span class="n">attentions</span> <span class="o">*</span> <span class="n">attention_mask</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;attentions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attentions</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="ProteinBertModel.load"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.ProteinBertModel.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">ProteinBertModel</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">new_state_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">checkpoint_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">pretrain_decoder_dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pretrain_decoder_dict</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="s1">&#39;sentence_encoder.&#39;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+                        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;encoder.sentence_encoder.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                        <span class="n">new_state_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">new_state_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">model</span></div></div>
+
+
+<div class="viewcode-block" id="Alphabet"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.Alphabet">[docs]</a><span class="k">class</span> <span class="nc">Alphabet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">standard_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+            <span class="n">prepend_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;null_0&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">),</span>
+            <span class="n">append_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;sep&gt;&quot;</span><span class="p">),</span>
+            <span class="n">prepend_bos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">append_eos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">standard_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">standard_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepend_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">prepend_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">append_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepend_bos</span> <span class="o">=</span> <span class="n">prepend_bos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_eos</span> <span class="o">=</span> <span class="n">append_eos</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prepend_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protein_tok_begin</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standard_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protein_tok_end</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="mi">8</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span> <span class="o">%</span> <span class="mi">8</span><span class="p">))</span> <span class="o">%</span> <span class="mi">8</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;null_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">append_toks</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">tok</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">tok</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">unk_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="p">[</span><span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cls_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eos_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ppi_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;ppi&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_special_tokens</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;eos&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;unk&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;pad&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;cls&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;mask&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;ppi&gt;&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Alphabet.get_idx"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.Alphabet.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tok</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unk_idx</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Alphabet.get_tok"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.Alphabet.get_tok">[docs]</a>    <span class="k">def</span> <span class="nf">get_tok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Alphabet.to_dict"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.Alphabet.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Alphabet.pad"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.Alphabet.pad">[docs]</a>    <span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span></div>
+
+<div class="viewcode-block" id="Alphabet.build_alphabet"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.Alphabet.build_alphabet">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">build_alphabet</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Alphabet&quot;</span><span class="p">:</span>
+        <span class="n">standard_toks</span> <span class="o">=</span> <span class="n">proteinseq_toks</span><span class="p">[</span><span class="s2">&quot;toks&quot;</span><span class="p">]</span>
+        <span class="n">prepend_toks</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">)</span>
+        <span class="n">append_toks</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">,)</span>
+        <span class="n">prepend_bos</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">append_eos</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">standard_toks</span><span class="p">,</span> <span class="n">prepend_toks</span><span class="p">,</span> <span class="n">append_toks</span><span class="p">,</span> <span class="n">prepend_bos</span><span class="p">,</span> <span class="n">append_eos</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Alphabet.tokenize"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.Alphabet.tokenize">[docs]</a>    <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inspired by https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py</span>
+<span class="sd">        Converts a string in a sequence of tokens, using the tokenizer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text (:obj:`str`):</span>
+<span class="sd">                The sequence to be encoded.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`List[str]`: The list of tokens.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">split_on_token</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">split_text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sub_text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">split_text</span><span class="p">):</span>
+                <span class="c1"># AddedToken can control whitespace stripping around them.</span>
+                <span class="c1"># We use them for GPT2 and Roberta to have different behavior depending on the special token</span>
+                <span class="c1"># Cf. https://github.com/huggingface/transformers/pull/2778</span>
+                <span class="c1"># and https://github.com/huggingface/transformers/issues/3788</span>
+                <span class="c1"># We strip left and right by default</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_text</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">sub_text</span> <span class="o">=</span> <span class="n">sub_text</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">sub_text</span> <span class="o">=</span> <span class="n">sub_text</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sub_text</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_text</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">def</span> <span class="nf">split_on_tokens</span><span class="p">(</span><span class="n">tok_list</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="k">return</span> <span class="p">[]</span>
+
+            <span class="n">tokenized_text</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">text_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tok_list</span><span class="p">:</span>
+                <span class="n">tokenized_text</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">sub_text</span> <span class="ow">in</span> <span class="n">text_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span><span class="p">:</span>
+                        <span class="n">tokenized_text</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">split_on_token</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">sub_text</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tokenized_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                <span class="n">text_list</span> <span class="o">=</span> <span class="n">tokenized_text</span>
+
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span>
+                        <span class="k">else</span> <span class="p">[</span><span class="n">token</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenized_text</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">no_split_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span>
+        <span class="n">tokenized_text</span> <span class="o">=</span> <span class="n">split_on_tokens</span><span class="p">(</span><span class="n">no_split_token</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tokenized_text</span></div>
+
+<div class="viewcode-block" id="Alphabet.encode"><a class="viewcode-back" href="../../../source/openprotein.models.html#openprotein.models.esm1b.Alphabet.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="p">[</span><span class="n">tok</span><span class="p">]</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, HICAI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

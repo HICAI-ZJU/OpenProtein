@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openprotein.datasets package &mdash; open-protein  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="openprotein.models package" href="openprotein.models.html" />
+    <link rel="prev" title="openprotein.data package" href="openprotein.data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> open-protein
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../QuickStart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="openprotein.data.html">data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.datasets.ec">openprotein.datasets.ec module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.ec.EC"><code class="docutils literal notranslate"><span class="pre">EC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.datasets.flip">openprotein.datasets.flip module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.flip.Flip"><code class="docutils literal notranslate"><span class="pre">Flip</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.datasets.go">openprotein.datasets.go module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.go.GO"><code class="docutils literal notranslate"><span class="pre">GO</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.datasets.tape">openprotein.datasets.tape module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.tape.Tape"><code class="docutils literal notranslate"><span class="pre">Tape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.datasets.uniref">openprotein.datasets.uniref module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.uniref.Uniref"><code class="docutils literal notranslate"><span class="pre">Uniref</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.datasets">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.EC"><code class="docutils literal notranslate"><span class="pre">EC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.Flip"><code class="docutils literal notranslate"><span class="pre">Flip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.GO"><code class="docutils literal notranslate"><span class="pre">GO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.Tape"><code class="docutils literal notranslate"><span class="pre">Tape</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.datasets.Uniref"><code class="docutils literal notranslate"><span class="pre">Uniref</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.models.html">models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.task.html">task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.utils.html">utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">open-protein</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">openprotein.datasets package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/openprotein.datasets.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="openprotein-datasets-package">
+<h1>openprotein.datasets package<a class="headerlink" href="#openprotein-datasets-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-openprotein.datasets.ec">
+<span id="openprotein-datasets-ec-module"></span><h2>openprotein.datasets.ec module<a class="headerlink" href="#module-openprotein.datasets.ec" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.ec.EC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.ec.</span></span><span class="sig-name descname"><span class="pre">EC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/ec.html#EC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.ec.EC" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>EC: The ENZYME database in 2000 The ENZYME database is a repository of information related to the nomenclature of
+enzymes. The data are from <a class="reference external" href="https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data">https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data</a></p>
+<blockquote>
+<div><dl>
+<dt>Args:</dt><dd><p>path (str): path for the dataset</p>
+</dd>
+<dt>Examples:</dt><dd><p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">EC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">EC</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">[&#39;MAHHHHHHMALVSMRQLLDHAAENSYGLPAFNVNNLEQMRAIMEAADQVNAPVIVQASAGARKYAGAPFLRHLILAAVEEFPHIPVVMHQDHGASPDVCQRSIQLGFSSVMMDGSLLEDGKTPSSYEYNVNATRTVVNFSHACGVSVEGEIGVLGNLETGEAGEEDGVGAAGKLSHDQMLTSVEDAVRFVKDTGVDALAIAVGTSHGAYKFTRPPTGDVLRIDRIKEIHQALPNTHIVMHGSSSVPQEWLKVINEYGGNIGETYGVPVEEIVEGIKHGVRKVNIDTDLRLASTGAVRRYLAENPSDFDPRKYLGKTIEAMKQICLDRYLAFGCEGQAGKIKPVSLEKMASRYAKGELNQIVK&#39;, array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">(&#39;MAHHHHHHMALVSMRQLLDHAAENSYGLPAFNVNNLEQMRAIMEAADQVNAPVIVQASAGARKYAGAPFLRHLILAAVEEFPHIPVVMHQDHGASPDVCQRSIQLGFSSVMMDGSLLEDGKTPSSYEYNVNATRTVVNFSHACGVSVEGEIGVLGNLETGEAGEEDGVGAAGKLSHDQMLTSVEDAVRFVKDTGVDALAIAVGTSHGAYKFTRPPTGDVLRIDRIKEIHQALPNTHIVMHGSSSVPQEWLKVINEYGGNIGETYGVPVEEIVEGIKHGVRKVNIDTDLRLASTGAVRRYLAENPSDFDPRKYLGKTIEAMKQICLDRYLAFGCEGQAGKIKPVSLEKMASRYAKGELNQIVK&#39;, &#39;MANRSHHNAGHRAMNALRKSGQKHSSESQLGSSEIGTTRHVYDVCDCLDTLAKLPDDSVQLIICDPPYNIMLADWDDHMDYIGWAKRWLAEAERVLSPTGSIAIFGGLQYQGEAGSGDLISIISHMRQNSKMLLANLIIWNYPNGMSAQRFFANRHEEIAWFAKTKKYFFDLDAVREPYDEETKAAYMKDKRLNPESVEKGRNPTNVWRMSRLNGNSLERVGHPTQKPAAVIERLVRALSHPGSTVLDFFAGSGVTARVAIQEGRNSICTDAAPVFKEYYQKQLTFLQDDGLIDKARSYEIVEGAANFGAALQRGDVAS&#39;)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-openprotein.datasets.flip">
+<span id="openprotein-datasets-flip-module"></span><h2>openprotein.datasets.flip module<a class="headerlink" href="#module-openprotein.datasets.flip" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.flip.Flip">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.flip.</span></span><span class="sig-name descname"><span class="pre">Flip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/flip.html#Flip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.flip.Flip" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<blockquote>
+<div><p>a benchmark for function prediction to encourage rapid scoring of representation learning for protein engineering</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path for the dataset</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">Flip</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">Flip</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">(&#39;MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTELEVLFQGPLDPNSMATYEVLCEVARKLGTDDREVVLFLLNVFIPQPTLAQLIGALRALKEEGRLTFPLLAECLFRAGRRDLLRDLLHLDPRFLERHLAGTMSYFSPYQLTVLHVDGELCARDIRSLIFLSKDTIGSRSTPQTFLHWVYCMENLDLLGPTDVDALMSMLRSLSRVDLQRQVQTLMGLHLSGPSHSQHYRHTPLEHHHHHH&#39;, 1.0)</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">(&#39;MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTELEVLFQGPLDPNSMATYEVLCEVARKLGTDDREVVLFLLNVFIPQPTLAQLIGALRALKEEGRLTFPLLAECLFRAGRRDLLRDLLHLDPRFLERHLAGTMSYFSPYQLTVLHVDGELCARDIRSLIFLSKDTIGSRSTPQTFLHWVYCMENLDLLGPTDVDALMSMLRSLSRVDLQRQVQTLMGLHLSGPSHSQHYRHTPLEHHHHHH&#39;, &#39;MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGIDGEWTYDDATKTFTVTELEVLFQGPLDPNSMATYEVLCEVARKLGTDDREVVLFLLNVFIPQPTLAQLIGALRALKEEGRLTFPLLAECLFRAGRRDLLRDLLHLDPRFLERHLAGTMSYFSPYQLTVLHVDGELCARDIRSLIFLSKDTIGSRSTPQTFLHWVYCMENLDLLGPTDVDALMSMLRSLSRVDLQRQVQTLMGLHLSGPSHSQHYRHTPLEHHHHHH&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-openprotein.datasets.go">
+<span id="openprotein-datasets-go-module"></span><h2>openprotein.datasets.go module<a class="headerlink" href="#module-openprotein.datasets.go" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.go.GO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.go.</span></span><span class="sig-name descname"><span class="pre">GO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/go.html#GO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.go.GO" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>GO: The goal of the Gene Ontology Consortium is to produce a dynamic, controlled vocabulary that can be applied
+to all eukaryotes even as knowledge of gene and protein roles in cells is accumulating and changing. The data are
+from <a class="reference external" href="https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data">https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data</a></p>
+<blockquote>
+<div><dl>
+<dt>Args:</dt><dd><p>path (str): path for the dataset</p>
+</dd>
+<dt>Examples:</dt><dd><p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">GO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">GO</span><span class="p">(</span><span class="s2">&quot;./resources/go/valid&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">MKWTNAGSRRGSKKAAPSARPLPVNLRLNDFSDDELHLATRRSTGNSPDAPPQAERVGYSQLTVLIAELRRSSRLGRSTCAEVTRHYPAIIYVFVFTRCLPQPNSCST</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">(&#39;MSISDTVKRAREAFNSGKTRSLQFRIQQLEALQRMINENLKSISGALASDLGKNEWTSYYEEVAHVLEELDTTIKELPDWAEDEPVAKTRQTQQDDLYIHSEPLGVVLVIGAWNYPFNLTIQPMVGAVAAGNAVILKPSEVSGHMADLLATLIPQYMDQNLYLVVKGGVPETTELLKERFDHIMYTGSTAVGKIVMAAAAKHLTPVTLELGGKSPCYVDKDCDLDVACRRIAWGKFMNSGQTCVAPDYILCDPSIQNQIVEKLKKSLKDFYGEDAKQSRDYGRIINDRHFQRVKGLIDNQKVAHGGTWDQSSRYIAPTILVDVDPQSPVMQEEIFGPVMPIVCVRSLEEAIQFINQREKPLALYVFSNNEKVIKKMIAETSSGGVTANDVIVHITVPTLPFGGVGNSGMGAYHGKKSFETFSHRRSCLVKSLLNEEAHKARYPPSPAKMPRH&#39;, &#39;IIGGHEAKPHSRPYMAYLQIMDEYSGSKKCGGFLIREDFVLTAAHCSGSKIQVTLGAHNIKEQEKMQQIIPVVKIIPHPAYNSKTISNDIMLLKLKSKAKRSSAVKPLNLPRRNVKVKPGDVCYVAGWGKLGPMGKYSDTLQEVELTVQEDQKCESYLKNYFDKANEICAGDPKIKRASFRGDSGGPLVCKKVAAGIVSYGQNDGSTPRAFTKVSTFLSWIKKTMKKS&#39;)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-openprotein.datasets.tape">
+<span id="openprotein-datasets-tape-module"></span><h2>openprotein.datasets.tape module<a class="headerlink" href="#module-openprotein.datasets.tape" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.tape.Tape">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.tape.</span></span><span class="sig-name descname"><span class="pre">Tape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/tape.html#Tape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.tape.Tape" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>The GB1 “four” variations set stems from <a class="reference external" href="https://elifesciences.org/articles/16965">https://elifesciences.org/articles/16965</a> in which mutations at four
+sites (V39, D40, G41 and V54) were probed against a binding assay. All splits are regression splits on the
+Fittness value reported in the <a class="reference external" href="https://elifesciences.org/articles/16965/figures#SD1-data">https://elifesciences.org/articles/16965/figures#SD1-data</a>. We use one_vs_rest
+which train is wild type and all single mutations, test is everything else.</p>
+<blockquote>
+<div><dl>
+<dt>Args:</dt><dd><p>path (str): path for the dataset</p>
+</dd>
+<dt>Examples:</dt><dd><p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">Tape</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">Tape</span><span class="p">(</span><span class="s2">&quot;./resources/Tape/valid&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">MKWTNAGSRRGSKKAAPSARPLPVNLRLNDFSDDELHLATRRSTGNSPDAPPQAERVGYSQLTVLIAELRRSSRLGRSTCAEVTRHYPAIIYVFVFTRCLPQPNSCST</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">{&#39;primary&#39;: [&#39;SKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTLSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRDEVKFEGDTLVNRIELKGIDFKEDGNILGHKLEYNYDSHNVYIMADKQKNGIKVNFKIRHNIEDGSVQLADHYQQNTPVGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLEFVTAAGITHGTDEPYK&#39;, &#39;SKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTLSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRDEVKFEGDTLVNRIELKGIDFKEDGNILGHKLENNYNSLNVYIMADKQKNGIKVNFKIRHNIEDGSVQLADHYQQNTPIGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLGFVTAAGITHGMDELYK&#39;], &#39;protein_length&#39;: tensor([237, 237]), &#39;log_fluorescence&#39;: tensor([[1.3010],</span>
+<span class="go">       [1.3012]]), &#39;num_mutations&#39;: tensor([5, 4])}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-openprotein.datasets.uniref">
+<span id="openprotein-datasets-uniref-module"></span><h2>openprotein.datasets.uniref module<a class="headerlink" href="#module-openprotein.datasets.uniref" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.uniref.Uniref">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.uniref.</span></span><span class="sig-name descname"><span class="pre">Uniref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/uniref.html#Uniref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.uniref.Uniref" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>UniProt Reference Cluster (UniRef) databases provide clustered sets of sequences from UniProtKB and selected
+UniParc records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path for the dataset</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.data</span> <span class="kn">import</span> <span class="n">MaskedConverter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">Uniref</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">Uniref</span><span class="p">(</span><span class="s2">&quot;./resources/uniref50/valid&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">MKWTNAGSRRGSKKAAPSARPLPVNLRLNDFSDDELHLATRRSTGNSPDAPPQAERVGYSQLTVLIAELRRSSRLGRSTCAEVTRHYPAIIYVFVFTRCLPQPNSCST</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">proteinseq_toks</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">        &#39;toks&#39;: [&#39;L&#39;, &#39;A&#39;, &#39;G&#39;, &#39;V&#39;, &#39;S&#39;, &#39;E&#39;, &#39;R&#39;, &#39;T&#39;, &#39;I&#39;, &#39;D&#39;, &#39;P&#39;, &#39;K&#39;, &#39;Q&#39;, &#39;N&#39;, &#39;F&#39;, &#39;Y&#39;, &#39;M&#39;, &#39;H&#39;, &#39;W&#39;,</span>
+<span class="go">                &#39;C&#39;,&#39;X&#39;, &#39;B&#39;, &#39;U&#39;, &#39;Z&#39;, &#39;O&#39;, &#39;.&#39;, &#39;-&#39;]</span>
+<span class="go">    }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">converter</span> <span class="o">=</span> <span class="n">MaskedConverter</span><span class="p">(</span><span class="n">proteinseq_toks</span><span class="p">[</span><span class="s2">&quot;toks&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">converter</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="go">        print(i)</span>
+<span class="go">tensor([[32, 20, 15,  ..., 21, 11,  2],</span>
+<span class="go">        [32, 20,  8,  ...,  1,  1,  1],</span>
+<span class="go">        [32, 20,  8,  ...,  1,  1,  1],</span>
+<span class="go">        [32, 20, 18,  ...,  1,  1,  1]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-openprotein.datasets">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-openprotein.datasets" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.EC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.</span></span><span class="sig-name descname"><span class="pre">EC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/ec.html#EC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.EC" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>EC: The ENZYME database in 2000 The ENZYME database is a repository of information related to the nomenclature of
+enzymes. The data are from <a class="reference external" href="https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data">https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data</a></p>
+<blockquote>
+<div><dl>
+<dt>Args:</dt><dd><p>path (str): path for the dataset</p>
+</dd>
+<dt>Examples:</dt><dd><p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">EC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">EC</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">[&#39;MAHHHHHHMALVSMRQLLDHAAENSYGLPAFNVNNLEQMRAIMEAADQVNAPVIVQASAGARKYAGAPFLRHLILAAVEEFPHIPVVMHQDHGASPDVCQRSIQLGFSSVMMDGSLLEDGKTPSSYEYNVNATRTVVNFSHACGVSVEGEIGVLGNLETGEAGEEDGVGAAGKLSHDQMLTSVEDAVRFVKDTGVDALAIAVGTSHGAYKFTRPPTGDVLRIDRIKEIHQALPNTHIVMHGSSSVPQEWLKVINEYGGNIGETYGVPVEEIVEGIKHGVRKVNIDTDLRLASTGAVRRYLAENPSDFDPRKYLGKTIEAMKQICLDRYLAFGCEGQAGKIKPVSLEKMASRYAKGELNQIVK&#39;, array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">(&#39;MAHHHHHHMALVSMRQLLDHAAENSYGLPAFNVNNLEQMRAIMEAADQVNAPVIVQASAGARKYAGAPFLRHLILAAVEEFPHIPVVMHQDHGASPDVCQRSIQLGFSSVMMDGSLLEDGKTPSSYEYNVNATRTVVNFSHACGVSVEGEIGVLGNLETGEAGEEDGVGAAGKLSHDQMLTSVEDAVRFVKDTGVDALAIAVGTSHGAYKFTRPPTGDVLRIDRIKEIHQALPNTHIVMHGSSSVPQEWLKVINEYGGNIGETYGVPVEEIVEGIKHGVRKVNIDTDLRLASTGAVRRYLAENPSDFDPRKYLGKTIEAMKQICLDRYLAFGCEGQAGKIKPVSLEKMASRYAKGELNQIVK&#39;, &#39;MANRSHHNAGHRAMNALRKSGQKHSSESQLGSSEIGTTRHVYDVCDCLDTLAKLPDDSVQLIICDPPYNIMLADWDDHMDYIGWAKRWLAEAERVLSPTGSIAIFGGLQYQGEAGSGDLISIISHMRQNSKMLLANLIIWNYPNGMSAQRFFANRHEEIAWFAKTKKYFFDLDAVREPYDEETKAAYMKDKRLNPESVEKGRNPTNVWRMSRLNGNSLERVGHPTQKPAAVIERLVRALSHPGSTVLDFFAGSGVTARVAIQEGRNSICTDAAPVFKEYYQKQLTFLQDDGLIDKARSYEIVEGAANFGAALQRGDVAS&#39;)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.Flip">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.</span></span><span class="sig-name descname"><span class="pre">Flip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/flip.html#Flip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.Flip" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<blockquote>
+<div><p>a benchmark for function prediction to encourage rapid scoring of representation learning for protein engineering</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path for the dataset</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">Flip</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">Flip</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">(&#39;MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTELEVLFQGPLDPNSMATYEVLCEVARKLGTDDREVVLFLLNVFIPQPTLAQLIGALRALKEEGRLTFPLLAECLFRAGRRDLLRDLLHLDPRFLERHLAGTMSYFSPYQLTVLHVDGELCARDIRSLIFLSKDTIGSRSTPQTFLHWVYCMENLDLLGPTDVDALMSMLRSLSRVDLQRQVQTLMGLHLSGPSHSQHYRHTPLEHHHHHH&#39;, 1.0)</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">(&#39;MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTELEVLFQGPLDPNSMATYEVLCEVARKLGTDDREVVLFLLNVFIPQPTLAQLIGALRALKEEGRLTFPLLAECLFRAGRRDLLRDLLHLDPRFLERHLAGTMSYFSPYQLTVLHVDGELCARDIRSLIFLSKDTIGSRSTPQTFLHWVYCMENLDLLGPTDVDALMSMLRSLSRVDLQRQVQTLMGLHLSGPSHSQHYRHTPLEHHHHHH&#39;, &#39;MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGIDGEWTYDDATKTFTVTELEVLFQGPLDPNSMATYEVLCEVARKLGTDDREVVLFLLNVFIPQPTLAQLIGALRALKEEGRLTFPLLAECLFRAGRRDLLRDLLHLDPRFLERHLAGTMSYFSPYQLTVLHVDGELCARDIRSLIFLSKDTIGSRSTPQTFLHWVYCMENLDLLGPTDVDALMSMLRSLSRVDLQRQVQTLMGLHLSGPSHSQHYRHTPLEHHHHHH&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.GO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.</span></span><span class="sig-name descname"><span class="pre">GO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/go.html#GO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.GO" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>GO: The goal of the Gene Ontology Consortium is to produce a dynamic, controlled vocabulary that can be applied
+to all eukaryotes even as knowledge of gene and protein roles in cells is accumulating and changing. The data are
+from <a class="reference external" href="https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data">https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data</a></p>
+<blockquote>
+<div><dl>
+<dt>Args:</dt><dd><p>path (str): path for the dataset</p>
+</dd>
+<dt>Examples:</dt><dd><p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">GO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">GO</span><span class="p">(</span><span class="s2">&quot;./resources/go/valid&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">MKWTNAGSRRGSKKAAPSARPLPVNLRLNDFSDDELHLATRRSTGNSPDAPPQAERVGYSQLTVLIAELRRSSRLGRSTCAEVTRHYPAIIYVFVFTRCLPQPNSCST</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">(&#39;MSISDTVKRAREAFNSGKTRSLQFRIQQLEALQRMINENLKSISGALASDLGKNEWTSYYEEVAHVLEELDTTIKELPDWAEDEPVAKTRQTQQDDLYIHSEPLGVVLVIGAWNYPFNLTIQPMVGAVAAGNAVILKPSEVSGHMADLLATLIPQYMDQNLYLVVKGGVPETTELLKERFDHIMYTGSTAVGKIVMAAAAKHLTPVTLELGGKSPCYVDKDCDLDVACRRIAWGKFMNSGQTCVAPDYILCDPSIQNQIVEKLKKSLKDFYGEDAKQSRDYGRIINDRHFQRVKGLIDNQKVAHGGTWDQSSRYIAPTILVDVDPQSPVMQEEIFGPVMPIVCVRSLEEAIQFINQREKPLALYVFSNNEKVIKKMIAETSSGGVTANDVIVHITVPTLPFGGVGNSGMGAYHGKKSFETFSHRRSCLVKSLLNEEAHKARYPPSPAKMPRH&#39;, &#39;IIGGHEAKPHSRPYMAYLQIMDEYSGSKKCGGFLIREDFVLTAAHCSGSKIQVTLGAHNIKEQEKMQQIIPVVKIIPHPAYNSKTISNDIMLLKLKSKAKRSSAVKPLNLPRRNVKVKPGDVCYVAGWGKLGPMGKYSDTLQEVELTVQEDQKCESYLKNYFDKANEICAGDPKIKRASFRGDSGGPLVCKKVAAGIVSYGQNDGSTPRAFTKVSTFLSWIKKTMKKS&#39;)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.Tape">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.</span></span><span class="sig-name descname"><span class="pre">Tape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/tape.html#Tape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.Tape" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>The GB1 “four” variations set stems from <a class="reference external" href="https://elifesciences.org/articles/16965">https://elifesciences.org/articles/16965</a> in which mutations at four
+sites (V39, D40, G41 and V54) were probed against a binding assay. All splits are regression splits on the
+Fittness value reported in the <a class="reference external" href="https://elifesciences.org/articles/16965/figures#SD1-data">https://elifesciences.org/articles/16965/figures#SD1-data</a>. We use one_vs_rest
+which train is wild type and all single mutations, test is everything else.</p>
+<blockquote>
+<div><dl>
+<dt>Args:</dt><dd><p>path (str): path for the dataset</p>
+</dd>
+<dt>Examples:</dt><dd><p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">Tape</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">Tape</span><span class="p">(</span><span class="s2">&quot;./resources/Tape/valid&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">MKWTNAGSRRGSKKAAPSARPLPVNLRLNDFSDDELHLATRRSTGNSPDAPPQAERVGYSQLTVLIAELRRSSRLGRSTCAEVTRHYPAIIYVFVFTRCLPQPNSCST</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">{&#39;primary&#39;: [&#39;SKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTLSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRDEVKFEGDTLVNRIELKGIDFKEDGNILGHKLEYNYDSHNVYIMADKQKNGIKVNFKIRHNIEDGSVQLADHYQQNTPVGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLEFVTAAGITHGTDEPYK&#39;, &#39;SKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTLSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRDEVKFEGDTLVNRIELKGIDFKEDGNILGHKLENNYNSLNVYIMADKQKNGIKVNFKIRHNIEDGSVQLADHYQQNTPIGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLGFVTAAGITHGMDELYK&#39;], &#39;protein_length&#39;: tensor([237, 237]), &#39;log_fluorescence&#39;: tensor([[1.3010],</span>
+<span class="go">       [1.3012]]), &#39;num_mutations&#39;: tensor([5, 4])}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.datasets.Uniref">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.datasets.</span></span><span class="sig-name descname"><span class="pre">Uniref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/datasets/uniref.html#Uniref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.datasets.Uniref" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="openprotein.data.html#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>UniProt Reference Cluster (UniRef) databases provide clustered sets of sequences from UniProtKB and selected
+UniParc records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path for the dataset</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>1:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.data</span> <span class="kn">import</span> <span class="n">MaskedConverter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.datasets</span> <span class="kn">import</span> <span class="n">Uniref</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">Uniref</span><span class="p">(</span><span class="s2">&quot;./resources/uniref50/valid&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">MKWTNAGSRRGSKKAAPSARPLPVNLRLNDFSDDELHLATRRSTGNSPDAPPQAERVGYSQLTVLIAELRRSSRLGRSTCAEVTRHYPAIIYVFVFTRCLPQPNSCST</span>
+</pre></div>
+</div>
+<p>2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">proteinseq_toks</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">        &#39;toks&#39;: [&#39;L&#39;, &#39;A&#39;, &#39;G&#39;, &#39;V&#39;, &#39;S&#39;, &#39;E&#39;, &#39;R&#39;, &#39;T&#39;, &#39;I&#39;, &#39;D&#39;, &#39;P&#39;, &#39;K&#39;, &#39;Q&#39;, &#39;N&#39;, &#39;F&#39;, &#39;Y&#39;, &#39;M&#39;, &#39;H&#39;, &#39;W&#39;,</span>
+<span class="go">                &#39;C&#39;,&#39;X&#39;, &#39;B&#39;, &#39;U&#39;, &#39;Z&#39;, &#39;O&#39;, &#39;.&#39;, &#39;-&#39;]</span>
+<span class="go">    }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">converter</span> <span class="o">=</span> <span class="n">MaskedConverter</span><span class="p">(</span><span class="n">proteinseq_toks</span><span class="p">[</span><span class="s2">&quot;toks&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">converter</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dl</span>
+<span class="go">        print(i)</span>
+<span class="go">tensor([[32, 20, 15,  ..., 21, 11,  2],</span>
+<span class="go">        [32, 20,  8,  ...,  1,  1,  1],</span>
+<span class="go">        [32, 20,  8,  ...,  1,  1,  1],</span>
+<span class="go">        [32, 20, 18,  ...,  1,  1,  1]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="openprotein.data.html" class="btn btn-neutral float-left" title="openprotein.data package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="openprotein.models.html" class="btn btn-neutral float-right" title="openprotein.models package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, HICAI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

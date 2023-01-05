@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openprotein.utils.metrics &mdash; open-protein  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> open-protein
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../QuickStart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.data.html">data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.datasets.html">datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.models.html">models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.task.html">task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.utils.html">utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">open-protein</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">openprotein.utils.metrics</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for openprotein.utils.metrics</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">mean_squared_error</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">spearmanr</span>
+
+<span class="kn">from</span> <span class="nn">openprotein.core</span> <span class="kn">import</span> <span class="n">Components</span>
+
+
+<div class="viewcode-block" id="Metric"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.Metric">[docs]</a><span class="k">class</span> <span class="nc">Metric</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Components</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The abstract class for metrics. Three methods such as compute_once, update and reset are defined. Other</span>
+<span class="sd">    metric classes need to rewrite the compute_once method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">==</span> <span class="s2">&quot;pt&quot;</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">torch</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_conver_to_list</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">==</span> <span class="s2">&quot;ms&quot;</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">mindspore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_tensor</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">,</span> <span class="n">A_tuple</span><span class="o">=</span><span class="n">mindspore</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_conver_to_list</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Metric.compute_once"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.Metric.compute_once">[docs]</a>    <span class="k">def</span> <span class="nf">compute_once</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Abstract methods, requiring subclasses to implement different evaluation metrics calculations</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            true : True values or ground-truth.</span>
+<span class="sd">            pred : Predicted values generated by the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="bp">NotImplemented</span></div>
+
+<div class="viewcode-block" id="Metric.update"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.Metric.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the score of current metrics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trues</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">preds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Metric.reset"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.Metric.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        reset internal parameters, such as preds, trues, score.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            No Args.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preds</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trues</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">true</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conver_to_list</span><span class="p">(</span><span class="n">true</span><span class="p">)</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conver_to_list</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trues</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">true</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Current result: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">({</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="Accuracy"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.Accuracy">[docs]</a><span class="k">class</span> <span class="nc">Accuracy</span><span class="p">(</span><span class="n">Metric</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to calculate accuracy classification score.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        normalize (bool): default=True.</span>
+<span class="sd">            If ``False``, return the number of correctly classified samples.</span>
+<span class="sd">            Otherwise, return the fraction of correctly classified samples.</span>
+<span class="sd">        sample_weight (n_samples)： default=None，array-like of shape (n_samples,)</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        In binary classification, this function is equal to the `jaccard_score` function.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from openprotein.utils import Accuracy</span>
+<span class="sd">        &gt;&gt;&gt; acc = Accuracy()</span>
+<span class="sd">        &gt;&gt;&gt; y_true = [0, 2, 1, 3]</span>
+<span class="sd">        &gt;&gt;&gt; y_pred = [0, 1, 2, 3]</span>
+<span class="sd">        &gt;&gt;&gt; acc(y_true, y_pred)</span>
+<span class="sd">        0.5</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span> <span class="o">=</span> <span class="n">normalize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_weight</span> <span class="o">=</span> <span class="n">sample_weight</span>
+
+<div class="viewcode-block" id="Accuracy.compute_once"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.Accuracy.compute_once">[docs]</a>    <span class="k">def</span> <span class="nf">compute_once</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">true</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the accuracy score for current pred and true</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            true : True values or ground-truth.</span>
+<span class="sd">            pred : Predicted values generated by the model.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Accuracy classification score.</span>
+<span class="sd">            the fraction of correctly classified samples (float),</span>
+<span class="sd">            or the number of correctly classified samples (int).</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; from openprotein.utils import Accuracy</span>
+<span class="sd">            &gt;&gt;&gt; acc = Accuracy()</span>
+<span class="sd">            &gt;&gt;&gt; y_true = [0, 2, 1, 3]</span>
+<span class="sd">            &gt;&gt;&gt; y_pred = [0, 1, 2, 3]</span>
+<span class="sd">            &gt;&gt;&gt; acc.compute_once(y_true, y_pred)</span>
+<span class="sd">            0.5</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_weight</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Acc&quot;</span></div>
+
+
+<div class="viewcode-block" id="MeanSquaredError"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.MeanSquaredError">[docs]</a><span class="k">class</span> <span class="nc">MeanSquaredError</span><span class="p">(</span><span class="n">Metric</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to calculate mean squared error regression loss.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sample_weight (array-like of shape n_samples):</span>
+<span class="sd">            Sample weights.</span>
+<span class="sd">        multioutput ({&#39;raw_values&#39;, &#39;uniform_average&#39;} or array-like of shape n_outputs):</span>
+<span class="sd">            Defines aggregating of multiple output values.</span>
+<span class="sd">        squared (bool):</span>
+<span class="sd">            If True returns MSE value, if False returns RMSE value.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from openprotein.utils import MeanSquaredError</span>
+<span class="sd">        &gt;&gt;&gt; mse = MeanSquaredError()</span>
+<span class="sd">        &gt;&gt;&gt; y_true = [3, -0.5, 2, 7]</span>
+<span class="sd">        &gt;&gt;&gt; y_pred = [2.5, 0.0, 2, 8]</span>
+<span class="sd">        &gt;&gt;&gt; mse(y_true, y_pred)</span>
+<span class="sd">        0.375</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s2">&quot;uniform_average&quot;</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_weight</span> <span class="o">=</span> <span class="n">sample_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multioutput</span> <span class="o">=</span> <span class="n">multioutput</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">squared</span> <span class="o">=</span> <span class="n">squared</span>
+
+
+<div class="viewcode-block" id="MeanSquaredError.compute_once"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.MeanSquaredError.compute_once">[docs]</a>    <span class="k">def</span> <span class="nf">compute_once</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the mean squared error regression loss for current pred and true.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            true: array-like of shape (n_samples,) or (n_samples, n_outputs)</span>
+<span class="sd">                Ground truth (correct) target values.</span>
+<span class="sd">            pred: array-like of shape (n_samples,) or (n_samples, n_outputs)</span>
+<span class="sd">                Estimated target values.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            loss (float or ndarray of floats):</span>
+<span class="sd">                A non-negative floating point value (the best value is 0.0), or an</span>
+<span class="sd">                array of floating point values, one for each individual target.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; from openprotein.utils import MeanSquaredError</span>
+<span class="sd">            &gt;&gt;&gt; mse = MeanSquaredError()</span>
+<span class="sd">            &gt;&gt;&gt; y_true = [3, -0.5, 2, 7]</span>
+<span class="sd">            &gt;&gt;&gt; y_pred = [2.5, 0.0, 2, 8]</span>
+<span class="sd">            &gt;&gt;&gt; mse.compute_once(y_true, y_pred)</span>
+<span class="sd">            0.375</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_weight</span><span class="p">,</span>
+                                  <span class="n">multioutput</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">multioutput</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">squared</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Mse&quot;</span></div>
+
+
+<div class="viewcode-block" id="Spearman"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.Spearman">[docs]</a><span class="k">class</span> <span class="nc">Spearman</span><span class="p">(</span><span class="n">Metric</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to calculate a Spearman correlation coefficient with associated p-value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        axis (int or None): int or None, optional</span>
+<span class="sd">            If axis=0 (default), then each column represents a variable, with</span>
+<span class="sd">            observations in the rows. If axis=1, the relationship is transposed:</span>
+<span class="sd">            each row represents a variable, while the columns contain observations.</span>
+<span class="sd">            If axis=None, then both arrays will be raveled.</span>
+<span class="sd">        nan_policy : {&#39;propagate&#39;, &#39;raise&#39;, &#39;omit&#39;}, optional</span>
+<span class="sd">            Defines how to handle when input contains nan.</span>
+<span class="sd">            The following options are available (default is &#39;propagate&#39;):</span>
+<span class="sd">            * &#39;propagate&#39;: returns nan</span>
+<span class="sd">            * &#39;raise&#39;: throws an error</span>
+<span class="sd">            * &#39;omit&#39;: performs the calculations ignoring nan values</span>
+<span class="sd">        alternative : {&#39;two-sided&#39;, &#39;less&#39;, &#39;greater&#39;}, optional</span>
+<span class="sd">            Defines the alternative hypothesis. Default is &#39;two-sided&#39;.</span>
+<span class="sd">            The following options are available:</span>
+<span class="sd">            * &#39;two-sided&#39;: the correlation is nonzero</span>
+<span class="sd">            * &#39;less&#39;: the correlation is negative (less than zero)</span>
+<span class="sd">            * &#39;greater&#39;:  the correlation is positive (greater than zero)</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from openprotein.utils import Spearman</span>
+<span class="sd">        &gt;&gt;&gt; spe = Spearman()</span>
+<span class="sd">        &gt;&gt;&gt; y_true = [1, 2, 3, 4, 5]</span>
+<span class="sd">        &gt;&gt;&gt; y_pred = [5, 6, 7, 8, 7]</span>
+<span class="sd">        &gt;&gt;&gt; spe(y_true, y_pred)</span>
+<span class="sd">        0.8207826816681233</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;propagate&#39;</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;two-sided&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nan_policy</span> <span class="o">=</span> <span class="n">nan_policy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alternative</span> <span class="o">=</span> <span class="n">alternative</span>
+
+<div class="viewcode-block" id="Spearman.compute_once"><a class="viewcode-back" href="../../../source/openprotein.utils.html#openprotein.utils.metrics.Spearman.compute_once">[docs]</a>    <span class="k">def</span> <span class="nf">compute_once</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the spearman correlation coefficient for current pred and true.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            true, pred (list): 1D or 2D array_like, pred is optional</span>
+<span class="sd">                One or two 1-D or 2-D arrays containing multiple variables and</span>
+<span class="sd">                observations. When these are 1-D, each represents a vector of</span>
+<span class="sd">                observations of a single variable. For the behavior in the 2-D case,</span>
+<span class="sd">                see under ``axis``, below.</span>
+<span class="sd">                Both arrays need to have the same length in the ``axis`` dimension.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float or ndarray (2-D square)</span>
+<span class="sd">                Spearman correlation matrix or correlation coefficient (if only 2</span>
+<span class="sd">                variables are given as parameters. Correlation matrix is square with</span>
+<span class="sd">                length equal to total number of variables (columns or rows) in ``true``</span>
+<span class="sd">                and ``pred`` combined.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            .. [1] Zwillinger, D. and Kokoska, S. (2000). CRC Standard</span>
+<span class="sd">                Probability and Statistics Tables and Formulae. Chapman &amp; Hall: New</span>
+<span class="sd">                York. 2000.</span>
+<span class="sd">                Section  14.7</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; from openprotein.utils import Spearman</span>
+<span class="sd">            &gt;&gt;&gt; spe = Spearman()</span>
+<span class="sd">            &gt;&gt;&gt; y_true = [1, 2, 3, 4, 5]</span>
+<span class="sd">            &gt;&gt;&gt; y_pred = [5, 6, 7, 8, 7]</span>
+<span class="sd">            &gt;&gt;&gt; spe.compute_once(y_true, y_pred)</span>
+<span class="sd">            0.8207826816681233</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rho</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">,</span>
+                           <span class="n">nan_policy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nan_policy</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alternative</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rho</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Spm&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, HICAI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

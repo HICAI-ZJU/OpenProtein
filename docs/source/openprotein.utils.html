@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openprotein.utils package &mdash; open-protein  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="openprotein.task package" href="openprotein.task.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> open-protein
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../QuickStart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="openprotein.data.html">data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.datasets.html">datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.models.html">models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.task.html">task</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.utils.activation">openprotein.utils.activation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.activation.gelu"><code class="docutils literal notranslate"><span class="pre">gelu()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.utils.metrics">openprotein.utils.metrics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.metrics.Accuracy"><code class="docutils literal notranslate"><span class="pre">Accuracy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.metrics.Accuracy.compute_once"><code class="docutils literal notranslate"><span class="pre">Accuracy.compute_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.metrics.MeanSquaredError"><code class="docutils literal notranslate"><span class="pre">MeanSquaredError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.metrics.MeanSquaredError.compute_once"><code class="docutils literal notranslate"><span class="pre">MeanSquaredError.compute_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.metrics.Metric"><code class="docutils literal notranslate"><span class="pre">Metric</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.metrics.Metric.compute_once"><code class="docutils literal notranslate"><span class="pre">Metric.compute_once()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.metrics.Metric.reset"><code class="docutils literal notranslate"><span class="pre">Metric.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.metrics.Metric.update"><code class="docutils literal notranslate"><span class="pre">Metric.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.metrics.Spearman"><code class="docutils literal notranslate"><span class="pre">Spearman</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.metrics.Spearman.compute_once"><code class="docutils literal notranslate"><span class="pre">Spearman.compute_once()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.utils.utils">openprotein.utils.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.utils.convert_to_bytes"><code class="docutils literal notranslate"><span class="pre">convert_to_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.utils.convert_to_str"><code class="docutils literal notranslate"><span class="pre">convert_to_str()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.utils">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.Accuracy"><code class="docutils literal notranslate"><span class="pre">Accuracy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.Accuracy.compute_once"><code class="docutils literal notranslate"><span class="pre">Accuracy.compute_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.MeanSquaredError"><code class="docutils literal notranslate"><span class="pre">MeanSquaredError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.MeanSquaredError.compute_once"><code class="docutils literal notranslate"><span class="pre">MeanSquaredError.compute_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.Spearman"><code class="docutils literal notranslate"><span class="pre">Spearman</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.utils.Spearman.compute_once"><code class="docutils literal notranslate"><span class="pre">Spearman.compute_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.convert_to_bytes"><code class="docutils literal notranslate"><span class="pre">convert_to_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.convert_to_str"><code class="docutils literal notranslate"><span class="pre">convert_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.utils.gelu"><code class="docutils literal notranslate"><span class="pre">gelu()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">open-protein</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">openprotein.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/openprotein.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="openprotein-utils-package">
+<h1>openprotein.utils package<a class="headerlink" href="#openprotein-utils-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-openprotein.utils.activation">
+<span id="openprotein-utils-activation-module"></span><h2>openprotein.utils.activation module<a class="headerlink" href="#module-openprotein.utils.activation" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.utils.activation.gelu">
+<span class="sig-prename descclassname"><span class="pre">openprotein.utils.activation.</span></span><span class="sig-name descname"><span class="pre">gelu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/activation.html#gelu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.activation.gelu" title="Permalink to this definition"></a></dt>
+<dd><p>Implementation of the gelu activation function.</p>
+<p>For information: OpenAI GPT’s gelu is slightly different and gives slightly different results:</p>
+<p>0.5 * x * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))</p>
+</dd></dl>
+
+</section>
+<section id="module-openprotein.utils.metrics">
+<span id="openprotein-utils-metrics-module"></span><h2>openprotein.utils.metrics module<a class="headerlink" href="#module-openprotein.utils.metrics" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.Accuracy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">Accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Accuracy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.Accuracy" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.utils.metrics.Metric" title="openprotein.utils.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a></p>
+<p>A class to calculate accuracy classification score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>normalize</strong> (<em>bool</em>) – default=True.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, return the number of correctly classified samples.
+Otherwise, return the fraction of correctly classified samples.</p></li>
+<li><p><strong>sample_weight</strong> (<em>n_samples</em><em>)</em><em>： default=None，array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>In binary classification, this function is equal to the <cite>jaccard_score</cite> function.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">Accuracy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">acc</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">acc</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.Accuracy.compute_once">
+<span class="sig-name descname"><span class="pre">compute_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Accuracy.compute_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.Accuracy.compute_once" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the accuracy score for current pred and true</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> – True values or ground-truth.</p></li>
+<li><p><strong>pred</strong> – Predicted values generated by the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Accuracy classification score.
+the fraction of correctly classified samples (float),
+or the number of correctly classified samples (int).</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">Accuracy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">acc</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">acc</span><span class="o">.</span><span class="n">compute_once</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.MeanSquaredError">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">MeanSquaredError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multioutput</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform_average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squared</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#MeanSquaredError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.MeanSquaredError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.utils.metrics.Metric" title="openprotein.utils.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a></p>
+<p>A class to calculate mean squared error regression loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape n_samples</em>) – Sample weights.</p></li>
+<li><p><strong>multioutput</strong> (<em>{'raw_values'</em><em>, </em><em>'uniform_average'}</em><em> or </em><em>array-like</em><em> of </em><em>shape n_outputs</em>) – Defines aggregating of multiple output values.</p></li>
+<li><p><strong>squared</strong> (<em>bool</em>) – If True returns MSE value, if False returns RMSE value.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">MeanSquaredError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mse</span> <span class="o">=</span> <span class="n">MeanSquaredError</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mse</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.375</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.MeanSquaredError.compute_once">
+<span class="sig-name descname"><span class="pre">compute_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#MeanSquaredError.compute_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.MeanSquaredError.compute_once" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the mean squared error regression loss for current pred and true.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> – array-like of shape (n_samples,) or (n_samples, n_outputs)
+Ground truth (correct) target values.</p></li>
+<li><p><strong>pred</strong> – array-like of shape (n_samples,) or (n_samples, n_outputs)
+Estimated target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A non-negative floating point value (the best value is 0.0), or an
+array of floating point values, one for each individual target.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>loss (float or ndarray of floats)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">MeanSquaredError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mse</span> <span class="o">=</span> <span class="n">MeanSquaredError</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mse</span><span class="o">.</span><span class="n">compute_once</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.375</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.Metric">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">Metric</span></span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.Metric" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The abstract class for metrics. Three methods such as compute_once, update and reset are defined. Other
+metric classes need to rewrite the compute_once method.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.Metric.compute_once">
+<span class="sig-name descname"><span class="pre">compute_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Metric.compute_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.Metric.compute_once" title="Permalink to this definition"></a></dt>
+<dd><p>Abstract methods, requiring subclasses to implement different evaluation metrics calculations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> – True values or ground-truth.</p></li>
+<li><p><strong>pred</strong> – Predicted values generated by the model.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.Metric.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Metric.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.Metric.reset" title="Permalink to this definition"></a></dt>
+<dd><p>reset internal parameters, such as preds, trues, score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Args.</strong> (<em>No</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.Metric.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Metric.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.Metric.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update the score of current metrics.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.Spearman">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">Spearman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'propagate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Spearman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.Spearman" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.utils.metrics.Metric" title="openprotein.utils.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a></p>
+<p>A class to calculate a Spearman correlation coefficient with associated p-value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>int</em><em> or </em><em>None</em>) – int or None, optional
+If axis=0 (default), then each column represents a variable, with
+observations in the rows. If axis=1, the relationship is transposed:
+each row represents a variable, while the columns contain observations.
+If axis=None, then both arrays will be raveled.</p></li>
+<li><p><strong>nan_policy</strong> – {‘propagate’, ‘raise’, ‘omit’}, optional
+Defines how to handle when input contains nan.
+The following options are available (default is ‘propagate’):
+* ‘propagate’: returns nan
+* ‘raise’: throws an error
+* ‘omit’: performs the calculations ignoring nan values</p></li>
+<li><p><strong>alternative</strong> – {‘two-sided’, ‘less’, ‘greater’}, optional
+Defines the alternative hypothesis. Default is ‘two-sided’.
+The following options are available:
+* ‘two-sided’: the correlation is nonzero
+* ‘less’: the correlation is negative (less than zero)
+* ‘greater’:  the correlation is positive (greater than zero)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">Spearman</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spe</span> <span class="o">=</span> <span class="n">Spearman</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spe</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.8207826816681233</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.metrics.Spearman.compute_once">
+<span class="sig-name descname"><span class="pre">compute_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Spearman.compute_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.metrics.Spearman.compute_once" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the spearman correlation coefficient for current pred and true.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> (<em>list</em>) – 1D or 2D array_like, pred is optional
+One or two 1-D or 2-D arrays containing multiple variables and
+observations. When these are 1-D, each represents a vector of
+observations of a single variable. For the behavior in the 2-D case,
+see under <code class="docutils literal notranslate"><span class="pre">axis</span></code>, below.
+Both arrays need to have the same length in the <code class="docutils literal notranslate"><span class="pre">axis</span></code> dimension.</p></li>
+<li><p><strong>pred</strong> (<em>list</em>) – 1D or 2D array_like, pred is optional
+One or two 1-D or 2-D arrays containing multiple variables and
+observations. When these are 1-D, each represents a vector of
+observations of a single variable. For the behavior in the 2-D case,
+see under <code class="docutils literal notranslate"><span class="pre">axis</span></code>, below.
+Both arrays need to have the same length in the <code class="docutils literal notranslate"><span class="pre">axis</span></code> dimension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>float or ndarray (2-D square)</dt><dd><p>Spearman correlation matrix or correlation coefficient (if only 2
+variables are given as parameters. Correlation matrix is square with
+length equal to total number of variables (columns or rows) in <code class="docutils literal notranslate"><span class="pre">true</span></code>
+and <code class="docutils literal notranslate"><span class="pre">pred</span></code> combined.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id1"><span class="brackets">1</span></dt>
+<dd><p>Zwillinger, D. and Kokoska, S. (2000). CRC Standard
+Probability and Statistics Tables and Formulae. Chapman &amp; Hall: New
+York. 2000.
+Section  14.7</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">Spearman</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spe</span> <span class="o">=</span> <span class="n">Spearman</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spe</span><span class="o">.</span><span class="n">compute_once</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.8207826816681233</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-openprotein.utils.utils">
+<span id="openprotein-utils-utils-module"></span><h2>openprotein.utils.utils module<a class="headerlink" href="#module-openprotein.utils.utils" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.utils.utils.convert_to_bytes">
+<span class="sig-prename descclassname"><span class="pre">openprotein.utils.utils.</span></span><span class="sig-name descname"><span class="pre">convert_to_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/utils/utils.html#convert_to_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.utils.convert_to_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>convert the input to bytes
+:param obj: the input to be converted
+:type obj: int or str or List[Union[str, int]]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the bytes type of the input</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – The number must be greater than zero</p></li>
+<li><p><strong>TypeError</strong> – The data must be int or str or list[Union[str, int]]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.utils.utils.convert_to_str">
+<span class="sig-prename descclassname"><span class="pre">openprotein.utils.utils.</span></span><span class="sig-name descname"><span class="pre">convert_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/utils.html#convert_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.utils.convert_to_str" title="Permalink to this definition"></a></dt>
+<dd><p>convert the input to string
+:param obj: the input to be converted
+:type obj: bytes or list[bytes]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the String type of the input</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – The data type must be bytes or list[bytes]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-openprotein.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-openprotein.utils" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.utils.Accuracy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.utils.</span></span><span class="sig-name descname"><span class="pre">Accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Accuracy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.Accuracy" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.utils.metrics.Metric" title="openprotein.utils.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a></p>
+<p>A class to calculate accuracy classification score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>normalize</strong> (<em>bool</em>) – default=True.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, return the number of correctly classified samples.
+Otherwise, return the fraction of correctly classified samples.</p></li>
+<li><p><strong>sample_weight</strong> (<em>n_samples</em><em>)</em><em>： default=None，array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>In binary classification, this function is equal to the <cite>jaccard_score</cite> function.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">Accuracy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">acc</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">acc</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.Accuracy.compute_once">
+<span class="sig-name descname"><span class="pre">compute_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Accuracy.compute_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.Accuracy.compute_once" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the accuracy score for current pred and true</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> – True values or ground-truth.</p></li>
+<li><p><strong>pred</strong> – Predicted values generated by the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Accuracy classification score.
+the fraction of correctly classified samples (float),
+or the number of correctly classified samples (int).</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">Accuracy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">acc</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">acc</span><span class="o">.</span><span class="n">compute_once</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.utils.MeanSquaredError">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.utils.</span></span><span class="sig-name descname"><span class="pre">MeanSquaredError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multioutput</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform_average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squared</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#MeanSquaredError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.MeanSquaredError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.utils.metrics.Metric" title="openprotein.utils.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a></p>
+<p>A class to calculate mean squared error regression loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape n_samples</em>) – Sample weights.</p></li>
+<li><p><strong>multioutput</strong> (<em>{'raw_values'</em><em>, </em><em>'uniform_average'}</em><em> or </em><em>array-like</em><em> of </em><em>shape n_outputs</em>) – Defines aggregating of multiple output values.</p></li>
+<li><p><strong>squared</strong> (<em>bool</em>) – If True returns MSE value, if False returns RMSE value.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">MeanSquaredError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mse</span> <span class="o">=</span> <span class="n">MeanSquaredError</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mse</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.375</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.MeanSquaredError.compute_once">
+<span class="sig-name descname"><span class="pre">compute_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#MeanSquaredError.compute_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.MeanSquaredError.compute_once" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the mean squared error regression loss for current pred and true.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> – array-like of shape (n_samples,) or (n_samples, n_outputs)
+Ground truth (correct) target values.</p></li>
+<li><p><strong>pred</strong> – array-like of shape (n_samples,) or (n_samples, n_outputs)
+Estimated target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A non-negative floating point value (the best value is 0.0), or an
+array of floating point values, one for each individual target.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>loss (float or ndarray of floats)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">MeanSquaredError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mse</span> <span class="o">=</span> <span class="n">MeanSquaredError</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mse</span><span class="o">.</span><span class="n">compute_once</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.375</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.utils.Spearman">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.utils.</span></span><span class="sig-name descname"><span class="pre">Spearman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'propagate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Spearman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.Spearman" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.utils.metrics.Metric" title="openprotein.utils.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a></p>
+<p>A class to calculate a Spearman correlation coefficient with associated p-value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>int</em><em> or </em><em>None</em>) – int or None, optional
+If axis=0 (default), then each column represents a variable, with
+observations in the rows. If axis=1, the relationship is transposed:
+each row represents a variable, while the columns contain observations.
+If axis=None, then both arrays will be raveled.</p></li>
+<li><p><strong>nan_policy</strong> – {‘propagate’, ‘raise’, ‘omit’}, optional
+Defines how to handle when input contains nan.
+The following options are available (default is ‘propagate’):
+* ‘propagate’: returns nan
+* ‘raise’: throws an error
+* ‘omit’: performs the calculations ignoring nan values</p></li>
+<li><p><strong>alternative</strong> – {‘two-sided’, ‘less’, ‘greater’}, optional
+Defines the alternative hypothesis. Default is ‘two-sided’.
+The following options are available:
+* ‘two-sided’: the correlation is nonzero
+* ‘less’: the correlation is negative (less than zero)
+* ‘greater’:  the correlation is positive (greater than zero)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">Spearman</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spe</span> <span class="o">=</span> <span class="n">Spearman</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spe</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.8207826816681233</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.utils.Spearman.compute_once">
+<span class="sig-name descname"><span class="pre">compute_once</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/openprotein/utils/metrics.html#Spearman.compute_once"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.Spearman.compute_once" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the spearman correlation coefficient for current pred and true.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> (<em>list</em>) – 1D or 2D array_like, pred is optional
+One or two 1-D or 2-D arrays containing multiple variables and
+observations. When these are 1-D, each represents a vector of
+observations of a single variable. For the behavior in the 2-D case,
+see under <code class="docutils literal notranslate"><span class="pre">axis</span></code>, below.
+Both arrays need to have the same length in the <code class="docutils literal notranslate"><span class="pre">axis</span></code> dimension.</p></li>
+<li><p><strong>pred</strong> (<em>list</em>) – 1D or 2D array_like, pred is optional
+One or two 1-D or 2-D arrays containing multiple variables and
+observations. When these are 1-D, each represents a vector of
+observations of a single variable. For the behavior in the 2-D case,
+see under <code class="docutils literal notranslate"><span class="pre">axis</span></code>, below.
+Both arrays need to have the same length in the <code class="docutils literal notranslate"><span class="pre">axis</span></code> dimension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>float or ndarray (2-D square)</dt><dd><p>Spearman correlation matrix or correlation coefficient (if only 2
+variables are given as parameters. Correlation matrix is square with
+length equal to total number of variables (columns or rows) in <code class="docutils literal notranslate"><span class="pre">true</span></code>
+and <code class="docutils literal notranslate"><span class="pre">pred</span></code> combined.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets">1</span></dt>
+<dd><p>Zwillinger, D. and Kokoska, S. (2000). CRC Standard
+Probability and Statistics Tables and Formulae. Chapman &amp; Hall: New
+York. 2000.
+Section  14.7</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">openprotein.utils</span> <span class="kn">import</span> <span class="n">Spearman</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spe</span> <span class="o">=</span> <span class="n">Spearman</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spe</span><span class="o">.</span><span class="n">compute_once</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="go">0.8207826816681233</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.utils.convert_to_bytes">
+<span class="sig-prename descclassname"><span class="pre">openprotein.utils.</span></span><span class="sig-name descname"><span class="pre">convert_to_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/utils/utils.html#convert_to_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.convert_to_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>convert the input to bytes
+:param obj: the input to be converted
+:type obj: int or str or List[Union[str, int]]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the bytes type of the input</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – The number must be greater than zero</p></li>
+<li><p><strong>TypeError</strong> – The data must be int or str or list[Union[str, int]]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.utils.convert_to_str">
+<span class="sig-prename descclassname"><span class="pre">openprotein.utils.</span></span><span class="sig-name descname"><span class="pre">convert_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/utils.html#convert_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.convert_to_str" title="Permalink to this definition"></a></dt>
+<dd><p>convert the input to string
+:param obj: the input to be converted
+:type obj: bytes or list[bytes]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the String type of the input</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – The data type must be bytes or list[bytes]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.utils.gelu">
+<span class="sig-prename descclassname"><span class="pre">openprotein.utils.</span></span><span class="sig-name descname"><span class="pre">gelu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/utils/activation.html#gelu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.utils.gelu" title="Permalink to this definition"></a></dt>
+<dd><p>Implementation of the gelu activation function.</p>
+<p>For information: OpenAI GPT’s gelu is slightly different and gives slightly different results:</p>
+<p>0.5 * x * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="openprotein.task.html" class="btn btn-neutral float-left" title="openprotein.task package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, HICAI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

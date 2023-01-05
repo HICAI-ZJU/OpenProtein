@@ -1,0 +1,50 @@
+=======
+Install
+=======
+
+Create environment
+------------------
+
+This repo is tested on Python 3.6 - 3.9 and PyTorch 1.5.0+ (PyTorch 1.5.0+ for examples).
+
+When you install Open-Protein, we do not force the installation of pytorch dependencies, you are free to choose a version of Pytorch 1.5 or higher.
+
+You can create a virtual environment, for example using anaconda.
+
+
+.. code-block:: bash
+
+    conda create -n openprotein python=3.8
+    conda activate openprotein
+
+
+
+With pip
+---------------
+
+First you need to install PyTorch and have a version number greater than 1.5.0. Please refer to PyTorch installation page regarding the specific install command for your platform.
+
+When PyTorch has been installed, Open-Protein can be installed using pip as follows:
+
+.. code-block:: python
+
+    pip install openprotein
+
+
+From Source
+-------------------
+Here also, you first need to install one of, or both, TensorFlow 2.0 and PyTorch. Please refer to PyTorch installation page regarding the specific install command for your platform.
+
+When PyTorch has been installed, you can install from source by cloning the repository and running:
+
+
+.. code-block:: bash
+
+    git clone https://github.com/ZJUAI/open-protein
+    cd open-protein
+    pip install .
+
+.. code-block:: bash
+
+    git pull
+    pip install --upgrade .

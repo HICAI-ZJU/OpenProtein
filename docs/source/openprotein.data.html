@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openprotein.data package &mdash; open-protein  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="openprotein.datasets package" href="openprotein.datasets.html" />
+    <link rel="prev" title="Tutorials" href="../Tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> open-protein
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../QuickStart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.data.factory">openprotein.data.factory module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.data.factory.Data"><code class="docutils literal notranslate"><span class="pre">Data</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.factory.Data.get_data"><code class="docutils literal notranslate"><span class="pre">Data.get_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.factory.Data.get_dataloader"><code class="docutils literal notranslate"><span class="pre">Data.get_dataloader()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.data.factory.DataFactory"><code class="docutils literal notranslate"><span class="pre">DataFactory</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.factory.DataFactory.load"><code class="docutils literal notranslate"><span class="pre">DataFactory.load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory"><code class="docutils literal notranslate"><span class="pre">PTDataFactory</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader"><code class="docutils literal notranslate"><span class="pre">PTDataFactory.DataLoader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.Dataset"><code class="docutils literal notranslate"><span class="pre">PTDataFactory.Dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.PTDataset"><code class="docutils literal notranslate"><span class="pre">PTDataFactory.PTDataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.get_data"><code class="docutils literal notranslate"><span class="pre">PTDataFactory.get_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.get_dataloader"><code class="docutils literal notranslate"><span class="pre">PTDataFactory.get_dataloader()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.data.process">openprotein.data.process module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.data.process.Alphabet"><code class="docutils literal notranslate"><span class="pre">Alphabet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.Alphabet.build_alphabet"><code class="docutils literal notranslate"><span class="pre">Alphabet.build_alphabet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.Alphabet.encode"><code class="docutils literal notranslate"><span class="pre">Alphabet.encode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.Alphabet.get_idx"><code class="docutils literal notranslate"><span class="pre">Alphabet.get_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.Alphabet.get_tok"><code class="docutils literal notranslate"><span class="pre">Alphabet.get_tok()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.Alphabet.pad"><code class="docutils literal notranslate"><span class="pre">Alphabet.pad()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.Alphabet.to_dict"><code class="docutils literal notranslate"><span class="pre">Alphabet.to_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.Alphabet.tokenize"><code class="docutils literal notranslate"><span class="pre">Alphabet.tokenize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.data.process.MaskedConverter"><code class="docutils literal notranslate"><span class="pre">MaskedConverter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.MaskedConverter.build_convert"><code class="docutils literal notranslate"><span class="pre">MaskedConverter.build_convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.MaskedConverter.encode"><code class="docutils literal notranslate"><span class="pre">MaskedConverter.encode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.MaskedConverter.get_idx"><code class="docutils literal notranslate"><span class="pre">MaskedConverter.get_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.process.MaskedConverter.tokenize"><code class="docutils literal notranslate"><span class="pre">MaskedConverter.tokenize()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.data">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.data.Alphabet"><code class="docutils literal notranslate"><span class="pre">Alphabet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.Alphabet.build_alphabet"><code class="docutils literal notranslate"><span class="pre">Alphabet.build_alphabet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.Alphabet.encode"><code class="docutils literal notranslate"><span class="pre">Alphabet.encode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.Alphabet.get_idx"><code class="docutils literal notranslate"><span class="pre">Alphabet.get_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.Alphabet.get_tok"><code class="docutils literal notranslate"><span class="pre">Alphabet.get_tok()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.Alphabet.pad"><code class="docutils literal notranslate"><span class="pre">Alphabet.pad()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.Alphabet.to_dict"><code class="docutils literal notranslate"><span class="pre">Alphabet.to_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.Alphabet.tokenize"><code class="docutils literal notranslate"><span class="pre">Alphabet.tokenize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.data.DataFactory"><code class="docutils literal notranslate"><span class="pre">DataFactory</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.DataFactory.load"><code class="docutils literal notranslate"><span class="pre">DataFactory.load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.data.MaskedConverter"><code class="docutils literal notranslate"><span class="pre">MaskedConverter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.MaskedConverter.build_convert"><code class="docutils literal notranslate"><span class="pre">MaskedConverter.build_convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.MaskedConverter.encode"><code class="docutils literal notranslate"><span class="pre">MaskedConverter.encode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.MaskedConverter.get_idx"><code class="docutils literal notranslate"><span class="pre">MaskedConverter.get_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.data.MaskedConverter.tokenize"><code class="docutils literal notranslate"><span class="pre">MaskedConverter.tokenize()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.datasets.html">datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.models.html">models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.task.html">task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.utils.html">utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">open-protein</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">openprotein.data package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/openprotein.data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="openprotein-data-package">
+<h1>openprotein.data package<a class="headerlink" href="#openprotein-data-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-openprotein.data.factory">
+<span id="openprotein-data-factory-module"></span><h2>openprotein.data.factory module<a class="headerlink" href="#module-openprotein.data.factory" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.factory.Data">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.data.factory.</span></span><span class="sig-name descname"><span class="pre">Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/factory.html#Data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.Data" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A basic interface for data.</p>
+<p>The methods <cite>get_data</cite> and <cite>get_dataloader</cite> are defined. All data subclasses need to implement this interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path for the dataset.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.factory.Data.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/factory.html#Data.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.Data.get_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get the dataset instance of the current dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Args.</strong> (<em>No</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>torch.utils.data.Dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.factory.Data.get_dataloader">
+<span class="sig-name descname"><span class="pre">get_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_sampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collate_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_memory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/factory.html#Data.get_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.Data.get_dataloader" title="Permalink to this definition"></a></dt>
+<dd><p>Get the dataloader of the current dataset.
+For details, see: <cite>https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – how many samples per batch to load (default: 1).</p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em><em>, </em><em>optional</em>) – set to True to have the data reshuffled at every epoch (default: False).</p></li>
+<li><p><strong>sampler</strong> (<em>Sampler</em><em> or </em><em>Iterable</em><em>, </em><em>optional</em>) – defines the strategy to draw samples from the dataset.</p></li>
+<li><p><strong>batch_sampler</strong> (<em>Sampler</em><em> or </em><em>Iterable</em><em>, </em><em>optional</em>) – like sampler, but returns a batch of indices at a time.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – how many subprocesses to use for data loading. (default: 0)</p></li>
+<li><p><strong>collate_fn</strong> (<em>Callable</em><em>, </em><em>optional</em>) – merges a list of samples to form a mini-batch of Tensor(s).</p></li>
+<li><p><strong>pin_memory</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the data loader will copy Tensors into device/CUDA pinned memory before returning them.</p></li>
+<li><p><strong>drop_last</strong> (<em>bool</em><em>, </em><em>optional</em>) – set to True to drop the last incomplete batch, if the dataset size is not divisible by the batch size.
+If False and the size of dataset is not divisible by the batch size, then the last batch will be smaller.
+(default: False)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.factory.DataFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.data.factory.</span></span><span class="sig-name descname"><span class="pre">DataFactory</span></span><a class="reference internal" href="../_modules/openprotein/data/factory.html#DataFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.DataFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Static Data Factory. Load different implementations of the dataset depending on the current runtime environment.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.factory.DataFactory.load">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><span class="pre">Data</span></a></span></span><a class="reference internal" href="../_modules/openprotein/data/factory.html#DataFactory.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.DataFactory.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load different implementations of the dataset depending on the current runtime environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>instance</strong> (<a class="reference internal" href="#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><em>Data</em></a>) – instance for Data class</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – path for the dataset file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A instance of implementing the Data interface</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">DataFactory</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./uniref50/valid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.data.factory.</span></span><span class="sig-name descname"><span class="pre">PTDataFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/factory.html#PTDataFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.PTDataFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>Factory for generating PyTorch datasets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path for the dataset file.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ImportError</strong> – No module named torch.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DataLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.Dataset" title="torch.utils.data.dataset.Dataset"><span class="pre">Dataset</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T_co</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sampler</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_sampler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sampler</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collate_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_memory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worker_init_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiprocessing_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefetch_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persistent_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T_co</span></code>]</p>
+<p>Data loader. Combines a dataset and a sampler, and provides an iterable over
+the given dataset.</p>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code> supports both map-style and
+iterable-style datasets with single- or multi-process loading, customizing
+loading order and optional automatic batching (collation) and memory pinning.</p>
+<p>See <code class="xref py py-mod docutils literal notranslate"><span class="pre">torch.utils.data</span></code> documentation page for more details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="#openprotein.data.factory.PTDataFactory.Dataset" title="openprotein.data.factory.PTDataFactory.Dataset"><em>Dataset</em></a>) – dataset from which to load the data.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – how many samples per batch to load
+(default: <code class="docutils literal notranslate"><span class="pre">1</span></code>).</p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em><em>, </em><em>optional</em>) – set to <code class="docutils literal notranslate"><span class="pre">True</span></code> to have the data reshuffled
+at every epoch (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></li>
+<li><p><strong>sampler</strong> (<em>Sampler</em><em> or </em><em>Iterable</em><em>, </em><em>optional</em>) – defines the strategy to draw
+samples from the dataset. Can be any <code class="docutils literal notranslate"><span class="pre">Iterable</span></code> with <code class="docutils literal notranslate"><span class="pre">__len__</span></code>
+implemented. If specified, <code class="xref py py-attr docutils literal notranslate"><span class="pre">shuffle</span></code> must not be specified.</p></li>
+<li><p><strong>batch_sampler</strong> (<em>Sampler</em><em> or </em><em>Iterable</em><em>, </em><em>optional</em>) – like <a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader.sampler" title="openprotein.data.factory.PTDataFactory.DataLoader.sampler"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampler</span></code></a>, but
+returns a batch of indices at a time. Mutually exclusive with
+<a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader.batch_size" title="openprotein.data.factory.PTDataFactory.DataLoader.batch_size"><code class="xref py py-attr docutils literal notranslate"><span class="pre">batch_size</span></code></a>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">shuffle</span></code>, <a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader.sampler" title="openprotein.data.factory.PTDataFactory.DataLoader.sampler"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampler</span></code></a>,
+and <a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader.drop_last" title="openprotein.data.factory.PTDataFactory.DataLoader.drop_last"><code class="xref py py-attr docutils literal notranslate"><span class="pre">drop_last</span></code></a>.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – how many subprocesses to use for data
+loading. <code class="docutils literal notranslate"><span class="pre">0</span></code> means that the data will be loaded in the main process.
+(default: <code class="docutils literal notranslate"><span class="pre">0</span></code>)</p></li>
+<li><p><strong>collate_fn</strong> (<em>callable</em><em>, </em><em>optional</em>) – merges a list of samples to form a
+mini-batch of Tensor(s).  Used when using batched loading from a
+map-style dataset.</p></li>
+<li><p><strong>pin_memory</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data loader will copy Tensors
+into CUDA pinned memory before returning them.  If your data elements
+are a custom type, or your <code class="xref py py-attr docutils literal notranslate"><span class="pre">collate_fn</span></code> returns a batch that is a custom type,
+see the example below.</p></li>
+<li><p><strong>drop_last</strong> (<em>bool</em><em>, </em><em>optional</em>) – set to <code class="docutils literal notranslate"><span class="pre">True</span></code> to drop the last incomplete batch,
+if the dataset size is not divisible by the batch size. If <code class="docutils literal notranslate"><span class="pre">False</span></code> and
+the size of dataset is not divisible by the batch size, then the last batch
+will be smaller. (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
+<li><p><strong>timeout</strong> (<em>numeric</em><em>, </em><em>optional</em>) – if positive, the timeout value for collecting a batch
+from workers. Should always be non-negative. (default: <code class="docutils literal notranslate"><span class="pre">0</span></code>)</p></li>
+<li><p><strong>worker_init_fn</strong> (<em>callable</em><em>, </em><em>optional</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, this will be called on each
+worker subprocess with the worker id (an int in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">num_workers</span> <span class="pre">-</span> <span class="pre">1]</span></code>) as
+input, after seeding and before data loading. (default: <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+<li><p><strong>generator</strong> (<em>torch.Generator</em><em>, </em><em>optional</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, this RNG will be used
+by RandomSampler to generate random indexes and multiprocessing to generate
+<cite>base_seed</cite> for workers. (default: <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+<li><p><strong>prefetch_factor</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>keyword-only arg</em>) – Number of samples loaded
+in advance by each worker. <code class="docutils literal notranslate"><span class="pre">2</span></code> means there will be a total of
+2 * num_workers samples prefetched across all workers. (default: <code class="docutils literal notranslate"><span class="pre">2</span></code>)</p></li>
+<li><p><strong>persistent_workers</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data loader will not shutdown
+the worker processes after a dataset has been consumed once. This allows to
+maintain the workers <cite>Dataset</cite> instances alive. (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">spawn</span></code> start method is used, <code class="xref py py-attr docutils literal notranslate"><span class="pre">worker_init_fn</span></code>
+cannot be an unpicklable object, e.g., a lambda function. See
+<span class="xref std std-ref">multiprocessing-best-practices</span> on more details related
+to multiprocessing in PyTorch.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">len(dataloader)</span></code> heuristic is based on the length of the sampler used.
+When <a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader.dataset" title="openprotein.data.factory.PTDataFactory.DataLoader.dataset"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dataset</span></code></a> is an <code class="xref py py-class docutils literal notranslate"><span class="pre">IterableDataset</span></code>,
+it instead returns an estimate based on <code class="docutils literal notranslate"><span class="pre">len(dataset)</span> <span class="pre">/</span> <span class="pre">batch_size</span></code>, with proper
+rounding depending on <a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader.drop_last" title="openprotein.data.factory.PTDataFactory.DataLoader.drop_last"><code class="xref py py-attr docutils literal notranslate"><span class="pre">drop_last</span></code></a>, regardless of multi-process loading
+configurations. This represents the best guess PyTorch can make because PyTorch
+trusts user <a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader.dataset" title="openprotein.data.factory.PTDataFactory.DataLoader.dataset"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dataset</span></code></a> code in correctly handling multi-process
+loading to avoid duplicate data.</p>
+<p>However, if sharding results in multiple workers having incomplete last batches,
+this estimate can still be inaccurate, because (1) an otherwise complete batch can
+be broken into multiple ones and (2) more than one batch worth of samples can be
+dropped when <a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader.drop_last" title="openprotein.data.factory.PTDataFactory.DataLoader.drop_last"><code class="xref py py-attr docutils literal notranslate"><span class="pre">drop_last</span></code></a> is set. Unfortunately, PyTorch can not detect such
+cases in general.</p>
+<p>See <a href="#id1"><span class="problematic" id="id2">`Dataset Types`_</span></a> for more details on these two types of datasets and how
+<code class="xref py py-class docutils literal notranslate"><span class="pre">IterableDataset</span></code> interacts with
+<a href="#id3"><span class="problematic" id="id4">`Multi-process data loading`_</span></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>See <span class="xref std std-ref">reproducibility</span>, and <span class="xref std std-ref">dataloader-workers-random-seed</span>, and
+<span class="xref std std-ref">data-loading-randomness</span> notes for random seed related questions.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.batch_size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.check_worker_number_rationality">
+<span class="sig-name descname"><span class="pre">check_worker_number_rationality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.check_worker_number_rationality" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.Dataset" title="torch.utils.data.dataset.Dataset"><span class="pre">Dataset</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T_co</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.drop_last">
+<span class="sig-name descname"><span class="pre">drop_last</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.drop_last" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.multiprocessing_context">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">multiprocessing_context</span></span><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.multiprocessing_context" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.num_workers">
+<span class="sig-name descname"><span class="pre">num_workers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.num_workers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.pin_memory">
+<span class="sig-name descname"><span class="pre">pin_memory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.pin_memory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.prefetch_factor">
+<span class="sig-name descname"><span class="pre">prefetch_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.prefetch_factor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.sampler">
+<span class="sig-name descname"><span class="pre">sampler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Sampler</span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.sampler" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.DataLoader.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.DataLoader.timeout" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Dataset</span></span><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.Dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T_co</span></code>]</p>
+<p>An abstract class representing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code>.</p>
+<p>All datasets that represent a map from keys to data samples should subclass
+it. All subclasses should overwrite <code class="xref py py-meth docutils literal notranslate"><span class="pre">__getitem__()</span></code>, supporting fetching a
+data sample for a given key. Subclasses could also optionally overwrite
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">__len__()</span></code>, which is expected to return the size of the dataset by many
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Sampler</span></code> implementations and the default options
+of <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code> by default constructs a index
+sampler that yields integral indices.  To make it work with a map-style
+dataset with non-integral indices/keys, a custom sampler must be provided.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.Dataset.functions">
+<span class="sig-name descname"><span class="pre">functions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'concat':</span> <span class="pre">functools.partial(&lt;function</span> <span class="pre">Dataset.register_datapipe_as_function.&lt;locals&gt;.class_function&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'torch.utils.data.datapipes.map.combining.ConcaterMapDataPipe'&gt;,</span> <span class="pre">False),</span> <span class="pre">'map':</span> <span class="pre">functools.partial(&lt;function</span> <span class="pre">Dataset.register_datapipe_as_function.&lt;locals&gt;.class_function&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'torch.utils.data.datapipes.map.callable.MapperMapDataPipe'&gt;,</span> <span class="pre">False)}</span></em><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.Dataset.functions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.Dataset.register_datapipe_as_function">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register_datapipe_as_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_to_register</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_df_api_tracing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.Dataset.register_datapipe_as_function" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.Dataset.register_function">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.Dataset.register_function" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.PTDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PTDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lmdb_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/factory.html#PTDataFactory.PTDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.PTDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.data.factory.PTDataFactory.Dataset" title="torch.utils.data.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a></p>
+<p>Implementing the PyTorch dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lmdb_path</strong> (<em>str</em>) – path for the lmdb dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.Dataset" title="torch.utils.data.dataset.Dataset"><span class="pre">Dataset</span></a></span></span><a class="reference internal" href="../_modules/openprotein/data/factory.html#PTDataFactory.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.get_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get the PyTorch implementation of the current dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args.</strong> (<em>No</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>torch.utils.data.Dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.factory.PTDataFactory.get_dataloader">
+<span class="sig-name descname"><span class="pre">get_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_sampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collate_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_memory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.data.factory.PTDataFactory.DataLoader" title="torch.utils.data.dataloader.DataLoader"><span class="pre">DataLoader</span></a></span></span><a class="reference internal" href="../_modules/openprotein/data/factory.html#PTDataFactory.get_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.factory.PTDataFactory.get_dataloader" title="Permalink to this definition"></a></dt>
+<dd><p>Get the PyTorch implementation of Dataloader for the current dataset
+For details, see: <cite>https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – how many samples per batch to load (default: 1).</p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em><em>, </em><em>optional</em>) – set to True to have the data reshuffled at every epoch (default: False).</p></li>
+<li><p><strong>sampler</strong> (<em>Sampler</em><em> or </em><em>Iterable</em><em>, </em><em>optional</em>) – defines the strategy to draw samples from the dataset.</p></li>
+<li><p><strong>batch_sampler</strong> (<em>Sampler</em><em> or </em><em>Iterable</em><em>, </em><em>optional</em>) – like sampler, but returns a batch of indices at a time.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – how many subprocesses to use for data loading. (default: 0)</p></li>
+<li><p><strong>collate_fn</strong> (<em>Callable</em><em>, </em><em>optional</em>) – merges a list of samples to form a mini-batch of Tensor(s).</p></li>
+<li><p><strong>pin_memory</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the data loader will copy Tensors into device/CUDA pinned memory before returning them.</p></li>
+<li><p><strong>drop_last</strong> (<em>bool</em><em>, </em><em>optional</em>) – (default: False)
+set to True to drop the last incomplete batch, if the dataset size is not divisible by the batch size.
+If False and the size of dataset is not divisible by the batch size, then the last batch will be smaller.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-openprotein.data.process">
+<span id="openprotein-data-process-module"></span><h2>openprotein.data.process module<a class="headerlink" href="#module-openprotein.data.process" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.process.Alphabet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.data.process.</span></span><span class="sig-name descname"><span class="pre">Alphabet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">standard_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;null_0&gt;',</span> <span class="pre">'&lt;pad&gt;',</span> <span class="pre">'&lt;eos&gt;',</span> <span class="pre">'&lt;unk&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;cls&gt;',</span> <span class="pre">'&lt;mask&gt;',</span> <span class="pre">'&lt;sep&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_bos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_eos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.Alphabet" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.Alphabet.build_alphabet">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_alphabet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proteinseq_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.data.process.Alphabet" title="openprotein.data.process.Alphabet"><span class="pre">Alphabet</span></a></span></span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.build_alphabet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.Alphabet.build_alphabet" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.Alphabet.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.Alphabet.encode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.Alphabet.get_idx">
+<span class="sig-name descname"><span class="pre">get_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tok</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.get_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.Alphabet.get_idx" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.Alphabet.get_tok">
+<span class="sig-name descname"><span class="pre">get_tok</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ind</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.get_tok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.Alphabet.get_tok" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.Alphabet.pad">
+<span class="sig-name descname"><span class="pre">pad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.pad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.Alphabet.pad" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.Alphabet.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.Alphabet.to_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.Alphabet.tokenize">
+<span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.Alphabet.tokenize" title="Permalink to this definition"></a></dt>
+<dd><p>Inspired by <a class="reference external" href="https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py">https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py</a>
+Converts a string in a sequence of tokens, using the tokenizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – The sequence to be encoded.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of tokens.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.process.MaskedConverter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.data.process.</span></span><span class="sig-name descname"><span class="pre">MaskedConverter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">standard_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;null_0&gt;',</span> <span class="pre">'&lt;pad&gt;',</span> <span class="pre">'&lt;eos&gt;',</span> <span class="pre">'&lt;unk&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;cls&gt;',</span> <span class="pre">'&lt;mask&gt;',</span> <span class="pre">'&lt;sep&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_bos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_eos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.MaskedConverter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.MaskedConverter.build_convert">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proteinseq_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.data.process.MaskedConverter" title="openprotein.data.process.MaskedConverter"><span class="pre">MaskedConverter</span></a></span></span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter.build_convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.MaskedConverter.build_convert" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.MaskedConverter.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter.encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.MaskedConverter.encode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.MaskedConverter.get_idx">
+<span class="sig-name descname"><span class="pre">get_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tok</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter.get_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.MaskedConverter.get_idx" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.process.MaskedConverter.tokenize">
+<span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter.tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.process.MaskedConverter.tokenize" title="Permalink to this definition"></a></dt>
+<dd><p>Inspired by <a class="reference external" href="https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py">https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py</a>
+Converts a string in a sequence of tokens, using the tokenizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – The sequence to be encoded.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of tokens.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-openprotein.data">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-openprotein.data" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.Alphabet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.data.</span></span><span class="sig-name descname"><span class="pre">Alphabet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">standard_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;null_0&gt;',</span> <span class="pre">'&lt;pad&gt;',</span> <span class="pre">'&lt;eos&gt;',</span> <span class="pre">'&lt;unk&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;cls&gt;',</span> <span class="pre">'&lt;mask&gt;',</span> <span class="pre">'&lt;sep&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_bos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_eos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.Alphabet" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.Alphabet.build_alphabet">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_alphabet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proteinseq_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.data.process.Alphabet" title="openprotein.data.process.Alphabet"><span class="pre">Alphabet</span></a></span></span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.build_alphabet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.Alphabet.build_alphabet" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.Alphabet.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.Alphabet.encode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.Alphabet.get_idx">
+<span class="sig-name descname"><span class="pre">get_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tok</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.get_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.Alphabet.get_idx" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.Alphabet.get_tok">
+<span class="sig-name descname"><span class="pre">get_tok</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ind</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.get_tok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.Alphabet.get_tok" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.Alphabet.pad">
+<span class="sig-name descname"><span class="pre">pad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.pad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.Alphabet.pad" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.Alphabet.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.Alphabet.to_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.Alphabet.tokenize">
+<span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/data/process.html#Alphabet.tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.Alphabet.tokenize" title="Permalink to this definition"></a></dt>
+<dd><p>Inspired by <a class="reference external" href="https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py">https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py</a>
+Converts a string in a sequence of tokens, using the tokenizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – The sequence to be encoded.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of tokens.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.DataFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.data.</span></span><span class="sig-name descname"><span class="pre">DataFactory</span></span><a class="reference internal" href="../_modules/openprotein/data/factory.html#DataFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.DataFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Static Data Factory. Load different implementations of the dataset depending on the current runtime environment.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.DataFactory.load">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><span class="pre">Data</span></a></span></span><a class="reference internal" href="../_modules/openprotein/data/factory.html#DataFactory.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.DataFactory.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load different implementations of the dataset depending on the current runtime environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>instance</strong> (<a class="reference internal" href="#openprotein.data.factory.Data" title="openprotein.data.factory.Data"><em>Data</em></a>) – instance for Data class</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – path for the dataset file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A instance of implementing the Data interface</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">DataFactory</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./uniref50/valid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.data.MaskedConverter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.data.</span></span><span class="sig-name descname"><span class="pre">MaskedConverter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">standard_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;null_0&gt;',</span> <span class="pre">'&lt;pad&gt;',</span> <span class="pre">'&lt;eos&gt;',</span> <span class="pre">'&lt;unk&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;cls&gt;',</span> <span class="pre">'&lt;mask&gt;',</span> <span class="pre">'&lt;sep&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_bos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_eos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.MaskedConverter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.MaskedConverter.build_convert">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proteinseq_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.data.process.MaskedConverter" title="openprotein.data.process.MaskedConverter"><span class="pre">MaskedConverter</span></a></span></span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter.build_convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.MaskedConverter.build_convert" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.MaskedConverter.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter.encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.MaskedConverter.encode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.MaskedConverter.get_idx">
+<span class="sig-name descname"><span class="pre">get_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tok</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter.get_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.MaskedConverter.get_idx" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.data.MaskedConverter.tokenize">
+<span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/data/process.html#MaskedConverter.tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.data.MaskedConverter.tokenize" title="Permalink to this definition"></a></dt>
+<dd><p>Inspired by <a class="reference external" href="https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py">https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py</a>
+Converts a string in a sequence of tokens, using the tokenizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – The sequence to be encoded.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of tokens.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="openprotein.datasets.html" class="btn btn-neutral float-right" title="openprotein.datasets package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, HICAI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openprotein.models package &mdash; open-protein  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="openprotein.task package" href="openprotein.task.html" />
+    <link rel="prev" title="openprotein.datasets package" href="openprotein.datasets.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> open-protein
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../QuickStart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="openprotein.data.html">data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.datasets.html">datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.models.esm1b">openprotein.models.esm1b module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet"><code class="docutils literal notranslate"><span class="pre">Alphabet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet.build_alphabet"><code class="docutils literal notranslate"><span class="pre">Alphabet.build_alphabet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet.encode"><code class="docutils literal notranslate"><span class="pre">Alphabet.encode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet.get_idx"><code class="docutils literal notranslate"><span class="pre">Alphabet.get_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet.get_tok"><code class="docutils literal notranslate"><span class="pre">Alphabet.get_tok()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet.pad"><code class="docutils literal notranslate"><span class="pre">Alphabet.pad()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet.to_dict"><code class="docutils literal notranslate"><span class="pre">Alphabet.to_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet.tokenize"><code class="docutils literal notranslate"><span class="pre">Alphabet.tokenize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.FairseqIncrementalState"><code class="docutils literal notranslate"><span class="pre">FairseqIncrementalState</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.FairseqIncrementalState.get_incremental_state"><code class="docutils literal notranslate"><span class="pre">FairseqIncrementalState.get_incremental_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.FairseqIncrementalState.init_incremental_state"><code class="docutils literal notranslate"><span class="pre">FairseqIncrementalState.init_incremental_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.FairseqIncrementalState.set_incremental_state"><code class="docutils literal notranslate"><span class="pre">FairseqIncrementalState.set_incremental_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.embedding_dim"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.embedding_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.max_norm"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.max_norm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.norm_type"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.norm_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.num_embeddings"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.num_embeddings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.padding_idx"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.padding_idx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.scale_grad_by_freq"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.scale_grad_by_freq</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.sparse"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.sparse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.weight"><code class="docutils literal notranslate"><span class="pre">LearnedPositionalEmbedding.weight</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.MultiheadAttention"><code class="docutils literal notranslate"><span class="pre">MultiheadAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.MultiheadAttention.apply_sparse_mask"><code class="docutils literal notranslate"><span class="pre">MultiheadAttention.apply_sparse_mask()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.MultiheadAttention.forward"><code class="docutils literal notranslate"><span class="pre">MultiheadAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.MultiheadAttention.prepare_for_onnx_export_"><code class="docutils literal notranslate"><span class="pre">MultiheadAttention.prepare_for_onnx_export_()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.MultiheadAttention.reorder_incremental_state"><code class="docutils literal notranslate"><span class="pre">MultiheadAttention.reorder_incremental_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.MultiheadAttention.reset_parameters"><code class="docutils literal notranslate"><span class="pre">MultiheadAttention.reset_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.MultiheadAttention.training"><code class="docutils literal notranslate"><span class="pre">MultiheadAttention.training</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.MultiheadAttention.upgrade_state_dict_named"><code class="docutils literal notranslate"><span class="pre">MultiheadAttention.upgrade_state_dict_named()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.ProteinBertModel"><code class="docutils literal notranslate"><span class="pre">ProteinBertModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.ProteinBertModel.forward"><code class="docutils literal notranslate"><span class="pre">ProteinBertModel.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.ProteinBertModel.load"><code class="docutils literal notranslate"><span class="pre">ProteinBertModel.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.ProteinBertModel.training"><code class="docutils literal notranslate"><span class="pre">ProteinBertModel.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.TransformerLayer"><code class="docutils literal notranslate"><span class="pre">TransformerLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.TransformerLayer.forward"><code class="docutils literal notranslate"><span class="pre">TransformerLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.models.esm1b.TransformerLayer.training"><code class="docutils literal notranslate"><span class="pre">TransformerLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.gelu"><code class="docutils literal notranslate"><span class="pre">gelu()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.utils_softmax"><code class="docutils literal notranslate"><span class="pre">utils_softmax()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.esm1b.with_incremental_state"><code class="docutils literal notranslate"><span class="pre">with_incremental_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.models">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.models.Esm1b"><code class="docutils literal notranslate"><span class="pre">Esm1b</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.task.html">task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.utils.html">utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">open-protein</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">openprotein.models package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/openprotein.models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="openprotein-models-package">
+<h1>openprotein.models package<a class="headerlink" href="#openprotein-models-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-openprotein.models.esm1b">
+<span id="openprotein-models-esm1b-module"></span><h2>openprotein.models.esm1b module<a class="headerlink" href="#module-openprotein.models.esm1b" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.Alphabet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">Alphabet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">standard_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;null_0&gt;',</span> <span class="pre">'&lt;pad&gt;',</span> <span class="pre">'&lt;eos&gt;',</span> <span class="pre">'&lt;unk&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_toks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('&lt;cls&gt;',</span> <span class="pre">'&lt;mask&gt;',</span> <span class="pre">'&lt;sep&gt;')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend_bos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_eos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#Alphabet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.Alphabet" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.Alphabet.build_alphabet">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_alphabet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openprotein.models.esm1b.Alphabet" title="openprotein.models.esm1b.Alphabet"><span class="pre">Alphabet</span></a></span></span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#Alphabet.build_alphabet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.Alphabet.build_alphabet" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.Alphabet.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#Alphabet.encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.Alphabet.encode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.Alphabet.get_idx">
+<span class="sig-name descname"><span class="pre">get_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tok</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#Alphabet.get_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.Alphabet.get_idx" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.Alphabet.get_tok">
+<span class="sig-name descname"><span class="pre">get_tok</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ind</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#Alphabet.get_tok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.Alphabet.get_tok" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.Alphabet.pad">
+<span class="sig-name descname"><span class="pre">pad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#Alphabet.pad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.Alphabet.pad" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.Alphabet.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#Alphabet.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.Alphabet.to_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.Alphabet.tokenize">
+<span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#Alphabet.tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.Alphabet.tokenize" title="Permalink to this definition"></a></dt>
+<dd><p>Inspired by <a class="reference external" href="https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py">https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py</a>
+Converts a string in a sequence of tokens, using the tokenizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – The sequence to be encoded.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of tokens.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.FairseqIncrementalState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">FairseqIncrementalState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#FairseqIncrementalState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.FairseqIncrementalState" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.FairseqIncrementalState.get_incremental_state">
+<span class="sig-name descname"><span class="pre">get_incremental_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incremental_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#FairseqIncrementalState.get_incremental_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.FairseqIncrementalState.get_incremental_state" title="Permalink to this definition"></a></dt>
+<dd><p>Helper for getting incremental state for an nn.Module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.FairseqIncrementalState.init_incremental_state">
+<span class="sig-name descname"><span class="pre">init_incremental_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#FairseqIncrementalState.init_incremental_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.FairseqIncrementalState.init_incremental_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.FairseqIncrementalState.set_incremental_state">
+<span class="sig-name descname"><span class="pre">set_incremental_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incremental_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#FairseqIncrementalState.set_incremental_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.FairseqIncrementalState.set_incremental_state" title="Permalink to this definition"></a></dt>
+<dd><p>Helper for setting incremental state for an nn.Module.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">LearnedPositionalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_embeddings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#LearnedPositionalEmbedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Embedding</span></code></p>
+<p>This module learns positional embeddings up to a fixed maximum size.
+Padding ids are ignored by either offsetting based on padding_idx
+or by setting padding_idx to None and ensuring that the appropriate
+position ids are passed to the forward function.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.embedding_dim">
+<span class="sig-name descname"><span class="pre">embedding_dim</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.embedding_dim" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#LearnedPositionalEmbedding.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Input is expected to be of size [bsz x seqlen].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.max_norm">
+<span class="sig-name descname"><span class="pre">max_norm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.max_norm" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.norm_type">
+<span class="sig-name descname"><span class="pre">norm_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.norm_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.num_embeddings">
+<span class="sig-name descname"><span class="pre">num_embeddings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.num_embeddings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.padding_idx">
+<span class="sig-name descname"><span class="pre">padding_idx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.padding_idx" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.scale_grad_by_freq">
+<span class="sig-name descname"><span class="pre">scale_grad_by_freq</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.scale_grad_by_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.sparse">
+<span class="sig-name descname"><span class="pre">sparse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.sparse" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.LearnedPositionalEmbedding.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#openprotein.models.esm1b.LearnedPositionalEmbedding.weight" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.MultiheadAttention">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">MultiheadAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_bias_kv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_zero_attn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self_attention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder_decoder_attention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#MultiheadAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.MultiheadAttention" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#openprotein.models.esm1b.FairseqIncrementalState" title="openprotein.models.esm1b.FairseqIncrementalState"><code class="xref py py-class docutils literal notranslate"><span class="pre">FairseqIncrementalState</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Multi-headed attention.</p>
+<p>See “Attention Is All You Need” for more details.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.MultiheadAttention.apply_sparse_mask">
+<span class="sig-name descname"><span class="pre">apply_sparse_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tgt_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bsz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#MultiheadAttention.apply_sparse_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.MultiheadAttention.apply_sparse_mask" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.MultiheadAttention.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_padding_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_kv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attn_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before_softmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_head_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#MultiheadAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.MultiheadAttention.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Input shape: Time x Batch x Channel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key_padding_mask</strong> (<em>ByteTensor</em><em>, </em><em>optional</em>) – mask to exclude
+keys that are pads, of shape <cite>(batch, src_len)</cite>, where
+padding elements are indicated by 1s.</p></li>
+<li><p><strong>need_weights</strong> (<em>bool</em><em>, </em><em>optional</em>) – return the attention weights,
+averaged over heads (default: False).</p></li>
+<li><p><strong>attn_mask</strong> (<em>ByteTensor</em><em>, </em><em>optional</em>) – typically used to
+implement causal attention, where the mask prevents the
+attention from looking forward in time (default: None).</p></li>
+<li><p><strong>before_softmax</strong> (<em>bool</em><em>, </em><em>optional</em>) – return the raw attention
+weights and values before the attention softmax.</p></li>
+<li><p><strong>need_head_weights</strong> (<em>bool</em><em>, </em><em>optional</em>) – return the attention
+weights for each head. Implies <em>need_weights</em>. Default:
+return the average attention weights over all heads.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.MultiheadAttention.prepare_for_onnx_export_">
+<span class="sig-name descname"><span class="pre">prepare_for_onnx_export_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#MultiheadAttention.prepare_for_onnx_export_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.MultiheadAttention.prepare_for_onnx_export_" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.MultiheadAttention.reorder_incremental_state">
+<span class="sig-name descname"><span class="pre">reorder_incremental_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incremental_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#MultiheadAttention.reorder_incremental_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.MultiheadAttention.reorder_incremental_state" title="Permalink to this definition"></a></dt>
+<dd><p>Reorder buffered internal state (for incremental generation).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.MultiheadAttention.reset_parameters">
+<span class="sig-name descname"><span class="pre">reset_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#MultiheadAttention.reset_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.MultiheadAttention.reset_parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.MultiheadAttention.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.models.esm1b.MultiheadAttention.training" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.MultiheadAttention.upgrade_state_dict_named">
+<span class="sig-name descname"><span class="pre">upgrade_state_dict_named</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#MultiheadAttention.upgrade_state_dict_named"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.MultiheadAttention.upgrade_state_dict_named" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.ProteinBertModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">ProteinBertModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphabet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#ProteinBertModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.ProteinBertModel" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>RoBERTa Large architecture for encoding protein sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_num</strong> (<em>int</em><em>, </em><em>default=33</em>) – number of layers</p></li>
+<li><p><strong>embed_dim</strong> (<em>int</em><em>, </em><em>default=1280</em>) – embedding dimension</p></li>
+<li><p><strong>ffn_embed_dim</strong> (<em>int</em><em>, </em><em>default=5120</em>) – embedding dimension for feedforward network</p></li>
+<li><p><strong>attention_head_num</strong> (<em>int</em><em>, </em><em>default=20</em>) – number of attention heads</p></li>
+<li><p><strong>max_position_num</strong> (<em>int</em><em>, </em><em>default=1024</em>) – number of positional embeddings to learn</p></li>
+<li><p><strong>emb_layer_norm_before</strong> (<em>bool</em><em>, </em><em>default=True</em>) – whether apply layer norm before multi-head attentions</p></li>
+<li><p><strong>checkpoint_path</strong> (<em>str</em>) – the path of pre-trained checkpoint</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.ProteinBertModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attn_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_head_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#ProteinBertModel.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.ProteinBertModel.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.ProteinBertModel.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphabet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#ProteinBertModel.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.ProteinBertModel.load" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.ProteinBertModel.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.models.esm1b.ProteinBertModel.training" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.TransformerLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">TransformerLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_embed_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_bias_kv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#TransformerLayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.TransformerLayer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Transformer layer block.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.TransformerLayer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self_attn_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self_attn_padding_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_head_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#TransformerLayer.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.TransformerLayer.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.TransformerLayer.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.models.esm1b.TransformerLayer.training" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.gelu">
+<span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">gelu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#gelu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.gelu" title="Permalink to this definition"></a></dt>
+<dd><p>Implementation of the gelu activation function.</p>
+<p>For information: OpenAI GPT’s gelu is slightly different
+(and gives slightly different results):
+0.5 * x * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.utils_softmax">
+<span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">utils_softmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onnx_trace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#utils_softmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.utils_softmax" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openprotein.models.esm1b.with_incremental_state">
+<span class="sig-prename descclassname"><span class="pre">openprotein.models.esm1b.</span></span><span class="sig-name descname"><span class="pre">with_incremental_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/models/esm1b.html#with_incremental_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.models.esm1b.with_incremental_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-openprotein.models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-openprotein.models" title="Permalink to this heading"></a></h2>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.models.Esm1b">
+<span class="sig-prename descclassname"><span class="pre">openprotein.models.</span></span><span class="sig-name descname"><span class="pre">Esm1b</span></span><a class="headerlink" href="#openprotein.models.Esm1b" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#openprotein.models.esm1b.ProteinBertModel" title="openprotein.models.esm1b.ProteinBertModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProteinBertModel</span></code></a></p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="openprotein.datasets.html" class="btn btn-neutral float-left" title="openprotein.datasets package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="openprotein.task.html" class="btn btn-neutral float-right" title="openprotein.task package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, HICAI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

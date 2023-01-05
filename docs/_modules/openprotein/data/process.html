@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openprotein.data.process &mdash; open-protein  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> open-protein
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../QuickStart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.data.html">data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.datasets.html">datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.models.html">models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.task.html">task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/openprotein.utils.html">utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">open-protein</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">openprotein.data.process</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for openprotein.data.process</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="MaskedConverter"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.MaskedConverter">[docs]</a><span class="k">class</span> <span class="nc">MaskedConverter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">standard_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                 <span class="n">prepend_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;null_0&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">),</span>
+                 <span class="n">append_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;sep&gt;&quot;</span><span class="p">),</span>
+                 <span class="n">prepend_bos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">append_eos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">standard_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">standard_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepend_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">prepend_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">append_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepend_bos</span> <span class="o">=</span> <span class="n">prepend_bos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_eos</span> <span class="o">=</span> <span class="n">append_eos</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prepend_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protein_tok_begin</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standard_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protein_tok_end</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="mi">8</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span> <span class="o">%</span> <span class="mi">8</span><span class="p">))</span> <span class="o">%</span> <span class="mi">8</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;null_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">append_toks</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">tok</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">tok</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">unk_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="p">[</span><span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cls_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eos_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_special_tokens</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;eos&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;unk&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;pad&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;cls&gt;&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_prob</span> <span class="o">=</span> <span class="mf">0.15</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_token_prob</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leave_unmasked_prob</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">))</span>
+        <span class="n">weights</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">/</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MaskedConverter.get_idx"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.MaskedConverter.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tok</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unk_idx</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_batch</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]):</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_batch</span><span class="p">)</span>
+        <span class="n">encoded_sequences</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">raw_batch</span><span class="p">]</span>
+        <span class="n">max_encoded_sequences_length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">encoded_sequence</span><span class="p">)</span> <span class="k">for</span> <span class="n">encoded_sequence</span> <span class="ow">in</span> <span class="n">encoded_sequences</span><span class="p">)</span>
+        <span class="n">origin_tokens</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">max_encoded_sequences_length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span>
+        <span class="p">)</span>
+        <span class="n">origin_tokens</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span><span class="p">)</span>
+        <span class="n">masked_tokens</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">max_encoded_sequences_length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span>
+        <span class="p">)</span>
+        <span class="n">masked_tokens</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span><span class="p">)</span>
+        <span class="n">target_tokens</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">max_encoded_sequences_length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span>
+        <span class="p">)</span>
+        <span class="n">target_tokens</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">encoded_sequence</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">encoded_sequences</span><span class="p">):</span>
+            <span class="n">sequence_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">encoded_sequence</span><span class="p">)</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">sequence_length</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">num_mask</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_prob</span> <span class="o">*</span> <span class="n">sequence_length</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span>
+            <span class="n">mask_idc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sequence_length</span><span class="p">,</span> <span class="n">num_mask</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">mask_idc</span> <span class="o">=</span> <span class="n">mask_idc</span><span class="p">[</span><span class="n">mask_idc</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)]</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">mask_idc</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># decide unmasking and random replacement</span>
+            <span class="n">rand_or_unmask_prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_token_prob</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">leave_unmasked_prob</span>
+            <span class="n">rand_or_unmask</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">sequence_length</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">rand_or_unmask_prob</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_token_prob</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">unmask</span> <span class="o">=</span> <span class="n">rand_or_unmask</span>
+                <span class="n">rand_mask</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">leave_unmasked_prob</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">unmask</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">rand_mask</span> <span class="o">=</span> <span class="n">rand_or_unmask</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">unmask_prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leave_unmasked_prob</span> <span class="o">/</span> <span class="n">rand_or_unmask_prob</span>
+                <span class="n">decision</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">sequence_length</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">unmask_prob</span>
+                <span class="n">unmask</span> <span class="o">=</span> <span class="n">rand_or_unmask</span> <span class="o">&amp;</span> <span class="n">decision</span>
+                <span class="n">rand_mask</span> <span class="o">=</span> <span class="n">rand_or_unmask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">decision</span><span class="p">)</span>
+
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">^</span> <span class="n">unmask</span>
+
+            <span class="n">masked_sequence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">encoded_sequence</span><span class="p">)</span>
+            <span class="n">masked_sequence</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_idx</span>
+            <span class="n">num_rand</span> <span class="o">=</span> <span class="n">rand_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">masked_sequence</span><span class="p">[</span><span class="n">rand_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">),</span>
+                <span class="n">num_rand</span><span class="p">,</span>
+                <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">encoded_sequence</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">encoded_sequence</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">masked_sequence</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">masked_sequence</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">origin_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cls_idx</span>
+            <span class="n">origin_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">encoded_sequence</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoded_sequence</span>
+            <span class="n">origin_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">encoded_sequence</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eos_idx</span>
+
+            <span class="n">masked_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cls_idx</span>
+            <span class="n">masked_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">masked_sequence</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">masked_sequence</span>
+            <span class="n">masked_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">masked_sequence</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eos_idx</span>
+
+            <span class="n">target_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">mask</span> <span class="o">|</span> <span class="n">unmask</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoded_sequence</span><span class="p">[</span><span class="n">mask</span> <span class="o">|</span> <span class="n">unmask</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">origin_tokens</span><span class="p">,</span> <span class="n">masked_tokens</span><span class="p">,</span> <span class="n">target_tokens</span>
+
+<div class="viewcode-block" id="MaskedConverter.build_convert"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.MaskedConverter.build_convert">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">build_convert</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">proteinseq_toks</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MaskedConverter&quot;</span><span class="p">:</span>
+        <span class="n">standard_toks</span> <span class="o">=</span> <span class="n">proteinseq_toks</span><span class="p">[</span><span class="s2">&quot;toks&quot;</span><span class="p">]</span>
+        <span class="n">prepend_toks</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">)</span>
+        <span class="n">append_toks</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">,)</span>
+        <span class="n">prepend_bos</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">append_eos</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">standard_toks</span><span class="p">,</span> <span class="n">prepend_toks</span><span class="p">,</span> <span class="n">append_toks</span><span class="p">,</span> <span class="n">prepend_bos</span><span class="p">,</span> <span class="n">append_eos</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MaskedConverter.tokenize"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.MaskedConverter.tokenize">[docs]</a>    <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inspired by https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py</span>
+<span class="sd">        Converts a string in a sequence of tokens, using the tokenizer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text (:obj:`str`):</span>
+<span class="sd">                The sequence to be encoded.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`List[str]`: The list of tokens.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">split_on_token</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">split_text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sub_text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">split_text</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_text</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">sub_text</span> <span class="o">=</span> <span class="n">sub_text</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">sub_text</span> <span class="o">=</span> <span class="n">sub_text</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sub_text</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_text</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">def</span> <span class="nf">split_on_tokens</span><span class="p">(</span><span class="n">tok_list</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="k">return</span> <span class="p">[]</span>
+
+            <span class="n">tokenized_text</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">text_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tok_list</span><span class="p">:</span>
+                <span class="n">tokenized_text</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">sub_text</span> <span class="ow">in</span> <span class="n">text_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span><span class="p">:</span>
+                        <span class="n">tokenized_text</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">split_on_token</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">sub_text</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tokenized_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                <span class="n">text_list</span> <span class="o">=</span> <span class="n">tokenized_text</span>
+
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span>
+                        <span class="k">else</span> <span class="p">[</span><span class="n">token</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenized_text</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">no_split_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span>
+        <span class="n">tokenized_text</span> <span class="o">=</span> <span class="n">split_on_tokens</span><span class="p">(</span><span class="n">no_split_token</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tokenized_text</span></div>
+
+<div class="viewcode-block" id="MaskedConverter.encode"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.MaskedConverter.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="p">[</span><span class="n">tok</span><span class="p">]</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span></div></div>
+
+
+<div class="viewcode-block" id="Alphabet"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.Alphabet">[docs]</a><span class="k">class</span> <span class="nc">Alphabet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">standard_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">prepend_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;null_0&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">),</span>
+        <span class="n">append_toks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;sep&gt;&quot;</span><span class="p">),</span>
+        <span class="n">prepend_bos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">append_eos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">standard_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">standard_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepend_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">prepend_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">append_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepend_bos</span> <span class="o">=</span> <span class="n">prepend_bos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_eos</span> <span class="o">=</span> <span class="n">append_eos</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prepend_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protein_tok_begin</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standard_toks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protein_tok_end</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="mi">8</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span> <span class="o">%</span> <span class="mi">8</span><span class="p">))</span> <span class="o">%</span> <span class="mi">8</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;null_</span><span class="si">{</span><span class="n">i</span>  <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">append_toks</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">tok</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">tok</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">unk_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="p">[</span><span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cls_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eos_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_special_tokens</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;eos&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;unk&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;pad&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;cls&gt;&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Alphabet.get_idx"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.Alphabet.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tok</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unk_idx</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Alphabet.get_tok"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.Alphabet.get_tok">[docs]</a>    <span class="k">def</span> <span class="nf">get_tok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_toks</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Alphabet.to_dict"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.Alphabet.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Alphabet.pad"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.Alphabet.pad">[docs]</a>    <span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_idx</span></div>
+
+<div class="viewcode-block" id="Alphabet.build_alphabet"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.Alphabet.build_alphabet">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">build_alphabet</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">proteinseq_toks</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Alphabet&quot;</span><span class="p">:</span>
+        <span class="n">standard_toks</span> <span class="o">=</span> <span class="n">proteinseq_toks</span><span class="p">[</span><span class="s2">&quot;toks&quot;</span><span class="p">]</span>
+        <span class="n">prepend_toks</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;cls&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;pad&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;unk&gt;&quot;</span><span class="p">)</span>
+        <span class="n">append_toks</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&lt;mask&gt;&quot;</span><span class="p">,)</span>
+        <span class="n">prepend_bos</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">append_eos</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">standard_toks</span><span class="p">,</span> <span class="n">prepend_toks</span><span class="p">,</span> <span class="n">append_toks</span><span class="p">,</span> <span class="n">prepend_bos</span><span class="p">,</span> <span class="n">append_eos</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Alphabet.tokenize"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.Alphabet.tokenize">[docs]</a>    <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inspired by https://github.com/huggingface/transformers/blob/master/src/transformers/tokenization_utils.py</span>
+<span class="sd">        Converts a string in a sequence of tokens, using the tokenizer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text (:obj:`str`):</span>
+<span class="sd">                The sequence to be encoded.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`List[str]`: The list of tokens.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">split_on_token</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">split_text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sub_text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">split_text</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_text</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">sub_text</span> <span class="o">=</span> <span class="n">sub_text</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">sub_text</span> <span class="o">=</span> <span class="n">sub_text</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sub_text</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_text</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">def</span> <span class="nf">split_on_tokens</span><span class="p">(</span><span class="n">tok_list</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="k">return</span> <span class="p">[]</span>
+
+            <span class="n">tokenized_text</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">text_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tok_list</span><span class="p">:</span>
+                <span class="n">tokenized_text</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">sub_text</span> <span class="ow">in</span> <span class="n">text_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span><span class="p">:</span>
+                        <span class="n">tokenized_text</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">split_on_token</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">sub_text</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tokenized_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_text</span><span class="p">)</span>
+                <span class="n">text_list</span> <span class="o">=</span> <span class="n">tokenized_text</span>
+
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span>
+                        <span class="k">else</span> <span class="p">[</span><span class="n">token</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenized_text</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">no_split_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_no_split_tokens</span>
+        <span class="n">tokenized_text</span> <span class="o">=</span> <span class="n">split_on_tokens</span><span class="p">(</span><span class="n">no_split_token</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tokenized_text</span></div>
+
+<div class="viewcode-block" id="Alphabet.encode"><a class="viewcode-back" href="../../../source/openprotein.data.html#openprotein.data.process.Alphabet.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tok_to_idx</span><span class="p">[</span><span class="n">tok</span><span class="p">]</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, HICAI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

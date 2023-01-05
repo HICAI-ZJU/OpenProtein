@@ -1,0 +1,42 @@
+.. open-protein documentation master file, created by
+   sphinx-quickstart on Wed Nov 30 13:14:49 2022.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+
+Open-Protein - A deep learning platform
+=========================================
+Open-Protein is an open source pre-training platform that supports multiple protein pre-training models and downstream tasks.
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: GETTING STARTED
+
+   QuickStart
+   Install
+   Example
+   Tutorials
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Documentation
+
+   data <../source/openprotein.data>
+   datasets <../source/openprotein.datasets>
+   models <../source/openprotein.models>
+   task <../source/openprotein.task>
+   utils <../source/openprotein.utils>
+
+
+
+
+
+
+

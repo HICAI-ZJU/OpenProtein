@@ -1,0 +1,44 @@
+# Example
+## Code Example
+
+
+
+``` python
+    import torch
+    import torch.nn.functional as F
+
+    from openprotein.datasets import Uniref
+    from openprotein.data import MaskedConverter, Alphabet
+    from openprotein.models import Esm1b
+    from openprotein.utils import Accuracy
+    uniref = Uniref("./valid")
+
+    proteinseq_toks = {
+        'toks': ['L', 'A', 'G', 'V', 'S', 'E', 'R', 'T', 'I', 'D', 'P', 'K', 'Q', 'N', 'F', 'Y', 'M', 'H', 'W', 'C',
+                    'X', 'B', 'U', 'Z', 'O', '.', '-']
+    }
+    converter = MaskedConverter.build_convert(proteinseq_toks)
+    alphabet = Alphabet.build_alphabet(proteinseq_toks)
+
+    args = {'num_layers': 33, 'embed_dim': 1280, 'logit_bias': True, 'ffn_embed_dim': 5120,
+                    'attention_heads': 20,
+                    'max_positions': 1024, 'emb_layer_norm_before': True, 'checkpoint_path': None}
+    args = argparse.Namespace(**args)
+    model = Esm1b(args, alphabet)
+
+    f = lambda x: converter(x)
+    dl = uniref.get_dataloader(collate_fn=f)
+    for origin_tokens, masked_tokens, target_tokens in dl:
+        result = model(masked_tokens)['logits']
+        loss = Loss(
+            result.contiguous().view(-1, result.size(-1)),
+            target_tokens.contiguous().view(-1),
+            reduction="mean",
+            ignore_index=alphabet.padding_idx
+        ).cross_entropy()
+        print(loss)
+        break
+
+
+
+```

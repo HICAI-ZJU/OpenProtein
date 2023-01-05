@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openprotein.task package &mdash; open-protein  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="openprotein.utils package" href="openprotein.utils.html" />
+    <link rel="prev" title="openprotein.models package" href="openprotein.models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> open-protein
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../QuickStart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="openprotein.data.html">data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.datasets.html">datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.models.html">models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">task</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.task.ec">openprotein.task.ec module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.task.ec.ProteinFunctionDecoder"><code class="docutils literal notranslate"><span class="pre">ProteinFunctionDecoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.ec.ProteinFunctionDecoder.forward"><code class="docutils literal notranslate"><span class="pre">ProteinFunctionDecoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.ec.ProteinFunctionDecoder.training"><code class="docutils literal notranslate"><span class="pre">ProteinFunctionDecoder.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.task.flip">openprotein.task.flip module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.task.flip.Args"><code class="docutils literal notranslate"><span class="pre">Args</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.flip.Args.args_parser"><code class="docutils literal notranslate"><span class="pre">Args.args_parser()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.task.flip.Convert"><code class="docutils literal notranslate"><span class="pre">Convert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.task.flip.SequenceRegressionDecoder"><code class="docutils literal notranslate"><span class="pre">SequenceRegressionDecoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.flip.SequenceRegressionDecoder.forward"><code class="docutils literal notranslate"><span class="pre">SequenceRegressionDecoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.flip.SequenceRegressionDecoder.training"><code class="docutils literal notranslate"><span class="pre">SequenceRegressionDecoder.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.task.tape">openprotein.task.tape module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.task.tape.ProteinContactMapDecoder"><code class="docutils literal notranslate"><span class="pre">ProteinContactMapDecoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.tape.ProteinContactMapDecoder.forward"><code class="docutils literal notranslate"><span class="pre">ProteinContactMapDecoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.tape.ProteinContactMapDecoder.training"><code class="docutils literal notranslate"><span class="pre">ProteinContactMapDecoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.task.tape.SequenceClassificaitonDecoder"><code class="docutils literal notranslate"><span class="pre">SequenceClassificaitonDecoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.tape.SequenceClassificaitonDecoder.forward"><code class="docutils literal notranslate"><span class="pre">SequenceClassificaitonDecoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.tape.SequenceClassificaitonDecoder.training"><code class="docutils literal notranslate"><span class="pre">SequenceClassificaitonDecoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#openprotein.task.tape.SequenceToSequenceClassificaitonDecoder"><code class="docutils literal notranslate"><span class="pre">SequenceToSequenceClassificaitonDecoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.tape.SequenceToSequenceClassificaitonDecoder.forward"><code class="docutils literal notranslate"><span class="pre">SequenceToSequenceClassificaitonDecoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#openprotein.task.tape.SequenceToSequenceClassificaitonDecoder.training"><code class="docutils literal notranslate"><span class="pre">SequenceToSequenceClassificaitonDecoder.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-openprotein.task">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="openprotein.utils.html">utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">open-protein</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">openprotein.task package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/openprotein.task.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="openprotein-task-package">
+<h1>openprotein.task package<a class="headerlink" href="#openprotein-task-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-openprotein.task.ec">
+<span id="openprotein-task-ec-module"></span><h2>openprotein.task.ec module<a class="headerlink" href="#module-openprotein.task.ec" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.task.ec.ProteinFunctionDecoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.task.ec.</span></span><span class="sig-name descname"><span class="pre">ProteinFunctionDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/ec.html#ProteinFunctionDecoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.ec.ProteinFunctionDecoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Process the embedding of the model into the format required by the downstream task called ec or go</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>embed_dim</strong> (<em>int</em><em>, </em><em>default=1280</em>) – embedding dimension</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.task.ec.ProteinFunctionDecoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/ec.html#ProteinFunctionDecoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.ec.ProteinFunctionDecoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.task.ec.ProteinFunctionDecoder.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.task.ec.ProteinFunctionDecoder.training" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-openprotein.task.flip">
+<span id="openprotein-task-flip-module"></span><h2>openprotein.task.flip module<a class="headerlink" href="#module-openprotein.task.flip" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.task.flip.Args">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.task.flip.</span></span><span class="sig-name descname"><span class="pre">Args</span></span><a class="reference internal" href="../_modules/openprotein/task/flip.html#Args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.flip.Args" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.task.flip.Args.args_parser">
+<span class="sig-name descname"><span class="pre">args_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/flip.html#Args.args_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.flip.Args.args_parser" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.task.flip.Convert">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.task.flip.</span></span><span class="sig-name descname"><span class="pre">Convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alphabet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/flip.html#Convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.flip.Convert" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Converter for tokenizing protein sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alphabet</strong> – Dictionary from amino acids to tokens</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.task.flip.SequenceRegressionDecoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.task.flip.</span></span><span class="sig-name descname"><span class="pre">SequenceRegressionDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/flip.html#SequenceRegressionDecoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.flip.SequenceRegressionDecoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Process the embedding of the model into the format required by the downstream task called flip, stability or fluorescence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>embed_dim</strong> (<em>int</em><em>, </em><em>default=1280</em>) – embedding dimension</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.task.flip.SequenceRegressionDecoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/flip.html#SequenceRegressionDecoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.flip.SequenceRegressionDecoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.task.flip.SequenceRegressionDecoder.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.task.flip.SequenceRegressionDecoder.training" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-openprotein.task.tape">
+<span id="openprotein-task-tape-module"></span><h2>openprotein.task.tape module<a class="headerlink" href="#module-openprotein.task.tape" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.task.tape.ProteinContactMapDecoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.task.tape.</span></span><span class="sig-name descname"><span class="pre">ProteinContactMapDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/tape.html#ProteinContactMapDecoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.tape.ProteinContactMapDecoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Process the embedding of the model into the format required by the downstream task called proteinnet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>embed_dim</strong> (<em>int</em><em>, </em><em>default=1280</em>) – embedding dimension</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.task.tape.ProteinContactMapDecoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/tape.html#ProteinContactMapDecoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.tape.ProteinContactMapDecoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.task.tape.ProteinContactMapDecoder.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.task.tape.ProteinContactMapDecoder.training" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.task.tape.SequenceClassificaitonDecoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.task.tape.</span></span><span class="sig-name descname"><span class="pre">SequenceClassificaitonDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/tape.html#SequenceClassificaitonDecoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.tape.SequenceClassificaitonDecoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Process the embedding of the model into the format required by the downstream task called remote_homology</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>embed_dim</strong> (<em>int</em><em>, </em><em>default=1280</em>) – embedding dimension</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.task.tape.SequenceClassificaitonDecoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/tape.html#SequenceClassificaitonDecoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.tape.SequenceClassificaitonDecoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.task.tape.SequenceClassificaitonDecoder.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.task.tape.SequenceClassificaitonDecoder.training" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="openprotein.task.tape.SequenceToSequenceClassificaitonDecoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">openprotein.task.tape.</span></span><span class="sig-name descname"><span class="pre">SequenceToSequenceClassificaitonDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/tape.html#SequenceToSequenceClassificaitonDecoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.tape.SequenceToSequenceClassificaitonDecoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Process the embedding of the model into the format required by the downstream task called secondary_structure</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>embed_dim</strong> (<em>int</em><em>, </em><em>default=1280</em>) – embedding dimension</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openprotein.task.tape.SequenceToSequenceClassificaitonDecoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openprotein/task/tape.html#SequenceToSequenceClassificaitonDecoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openprotein.task.tape.SequenceToSequenceClassificaitonDecoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openprotein.task.tape.SequenceToSequenceClassificaitonDecoder.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#openprotein.task.tape.SequenceToSequenceClassificaitonDecoder.training" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-openprotein.task">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-openprotein.task" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="openprotein.models.html" class="btn btn-neutral float-left" title="openprotein.models package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="openprotein.utils.html" class="btn btn-neutral float-right" title="openprotein.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, HICAI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

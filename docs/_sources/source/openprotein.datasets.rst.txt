@@ -1,0 +1,53 @@
+openprotein.datasets package
+============================
+
+Submodules
+----------
+
+openprotein.datasets.ec module
+------------------------------
+
+.. automodule:: openprotein.datasets.ec
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+openprotein.datasets.flip module
+--------------------------------
+
+.. automodule:: openprotein.datasets.flip
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+openprotein.datasets.go module
+------------------------------
+
+.. automodule:: openprotein.datasets.go
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+openprotein.datasets.tape module
+--------------------------------
+
+.. automodule:: openprotein.datasets.tape
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+openprotein.datasets.uniref module
+----------------------------------
+
+.. automodule:: openprotein.datasets.uniref
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: openprotein.datasets
+   :members:
+   :undoc-members:
+   :show-inheritance:
