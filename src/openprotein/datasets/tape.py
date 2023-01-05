@@ -3,7 +3,10 @@ from openprotein.data.factory import Data
 
 class Tape(Data):
     """
-     Tape databases.
+    The GB1 "four" variations set stems from https://elifesciences.org/articles/16965 in which mutations at four
+    sites (V39, D40, G41 and V54) were probed against a binding assay. All splits are regression splits on the
+    Fittness value reported in the https://elifesciences.org/articles/16965/figures#SD1-data. We use one_vs_rest
+    which train is wild type and all single mutations, test is everything else.
 
      Args:
          path (str): path for the dataset
@@ -18,19 +21,11 @@ class Tape(Data):
 
          2:
 
-         >>> proteinseq_toks = {
-                 'toks': ['L', 'A', 'G', 'V', 'S', 'E', 'R', 'T', 'I', 'D', 'P', 'K', 'Q', 'N', 'F', 'Y', 'M', 'H', 'W',
-                         'C','X', 'B', 'U', 'Z', 'O', '.', '-']
-             }
-         >>> converter = MaskedConverter(proteinseq_toks["toks"])
-         >>> f = lambda x: converter(x)
-         >>> dl = data.get_dataloader(batch_size=4, collate_fn=f)
-         >>> for i, j, k in dl
-                 print(i)
-         tensor([[32, 20, 15,  ..., 21, 11,  2],
-                 [32, 20,  8,  ...,  1,  1,  1],
-                 [32, 20,  8,  ...,  1,  1,  1],
-                 [32, 20, 18,  ...,  1,  1,  1]])
+         >>> dl = data.get_dataloader(batch_size=2)
+         >>> for x, y in dl
+         >>>    print(x)
+         {'primary': ['SKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTLSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRDEVKFEGDTLVNRIELKGIDFKEDGNILGHKLEYNYDSHNVYIMADKQKNGIKVNFKIRHNIEDGSVQLADHYQQNTPVGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLEFVTAAGITHGTDEPYK', 'SKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTLSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRDEVKFEGDTLVNRIELKGIDFKEDGNILGHKLENNYNSLNVYIMADKQKNGIKVNFKIRHNIEDGSVQLADHYQQNTPIGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLGFVTAAGITHGMDELYK'], 'protein_length': tensor([237, 237]), 'log_fluorescence': tensor([[1.3010],
+                [1.3012]]), 'num_mutations': tensor([5, 4])}
      """
 
     def __init__(self, path: str):

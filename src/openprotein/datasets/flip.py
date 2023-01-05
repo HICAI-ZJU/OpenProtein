@@ -3,13 +3,14 @@ from openprotein.data.factory import Data
 
 class Flip(Data):
     """
-     Flip databases.
+	a benchmark for function prediction to encourage rapid scoring of representation learning for protein engineering
 
      Args:
          path (str): path for the dataset
 
      Examples:
          1:
+
          >>> from openprotein.datasets import Flip
          >>> data = Flip(DATA_PATH)
          >>> dataset = data.get_data()

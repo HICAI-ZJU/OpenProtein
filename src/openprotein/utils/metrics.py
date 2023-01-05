@@ -228,7 +228,7 @@ class Spearman(Metric):
                 Both arrays need to have the same length in the ``axis`` dimension.
 
         Returns:
-            rho : float or ndarray (2-D square)
+            float or ndarray (2-D square)
                 Spearman correlation matrix or correlation coefficient (if only 2
                 variables are given as parameters. Correlation matrix is square with
                 length equal to total number of variables (columns or rows) in ``true``

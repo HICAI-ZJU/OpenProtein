@@ -3,13 +3,16 @@ from openprotein.data.factory import Data
 
 class GO(Data):
     """
-     GO databases.
+    GO: The goal of the Gene Ontology Consortium is to produce a dynamic, controlled vocabulary that can be applied
+    to all eukaryotes even as knowledge of gene and protein roles in cells is accumulating and changing. The data are
+    from https://github.com/flatironinstitute/DeepFRI/tree/master/preprocessing/data
 
      Args:
          path (str): path for the dataset
 
      Examples:
          1:
+
          >>> from openprotein.datasets import GO
          >>> data = GO("./resources/go/valid")
          >>> dataset = data.get_data()
@@ -18,19 +21,11 @@ class GO(Data):
 
          2:
 
-         >>> proteinseq_toks = {
-                 'toks': ['L', 'A', 'G', 'V', 'S', 'E', 'R', 'T', 'I', 'D', 'P', 'K', 'Q', 'N', 'F', 'Y', 'M', 'H', 'W',
-                         'C','X', 'B', 'U', 'Z', 'O', '.', '-']
-             }
-         >>> converter = MaskedConverter(proteinseq_toks["toks"])
-         >>> f = lambda x: converter(x)
-         >>> dl = data.get_dataloader(batch_size=4, collate_fn=f)
-         >>> for i, j, k in dl
-                 print(i)
-         tensor([[32, 20, 15,  ..., 21, 11,  2],
-                 [32, 20,  8,  ...,  1,  1,  1],
-                 [32, 20,  8,  ...,  1,  1,  1],
-                 [32, 20, 18,  ...,  1,  1,  1]])
+         >>> dl = data.get_dataloader(batch_size=2)
+         >>> for x, y in dl
+         >>>    print(x)
+         ('MSISDTVKRAREAFNSGKTRSLQFRIQQLEALQRMINENLKSISGALASDLGKNEWTSYYEEVAHVLEELDTTIKELPDWAEDEPVAKTRQTQQDDLYIHSEPLGVVLVIGAWNYPFNLTIQPMVGAVAAGNAVILKPSEVSGHMADLLATLIPQYMDQNLYLVVKGGVPETTELLKERFDHIMYTGSTAVGKIVMAAAAKHLTPVTLELGGKSPCYVDKDCDLDVACRRIAWGKFMNSGQTCVAPDYILCDPSIQNQIVEKLKKSLKDFYGEDAKQSRDYGRIINDRHFQRVKGLIDNQKVAHGGTWDQSSRYIAPTILVDVDPQSPVMQEEIFGPVMPIVCVRSLEEAIQFINQREKPLALYVFSNNEKVIKKMIAETSSGGVTANDVIVHITVPTLPFGGVGNSGMGAYHGKKSFETFSHRRSCLVKSLLNEEAHKARYPPSPAKMPRH', 'IIGGHEAKPHSRPYMAYLQIMDEYSGSKKCGGFLIREDFVLTAAHCSGSKIQVTLGAHNIKEQEKMQQIIPVVKIIPHPAYNSKTISNDIMLLKLKSKAKRSSAVKPLNLPRRNVKVKPGDVCYVAGWGKLGPMGKYSDTLQEVELTVQEDQKCESYLKNYFDKANEICAGDPKIKRASFRGDSGGPLVCKKVAAGIVSYGQNDGSTPRAFTKVSTFLSWIKKTMKKS')
+
      """
 
     def __init__(self, path: str):
