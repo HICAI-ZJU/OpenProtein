@@ -1,7 +1,5 @@
 from typing import *
-from functools import partial
-
-from sklearn.metrics import accuracy_score, f1_score, mean_squared_error
+from sklearn.metrics import accuracy_score, mean_squared_error, average_precision_score
 from scipy.stats import spearmanr
 
 from openprotein.core import Components
@@ -21,11 +19,6 @@ class Metric(metaclass=Components):
             import torch
             self.is_tensor = torch.is_tensor
             self._conver_to_list = lambda x: x.tolist()
-        elif self._backend == "ms":
-            import mindspore
-            self.is_tensor = partial(isinstance, A_tuple=mindspore.Tensor)
-            self._conver_to_list = lambda x: x.asnumpy().tolist()
-
 
     def compute_once(self, true, pred) -> float:
         """
@@ -256,3 +249,89 @@ class Spearman(Metric):
 
     def __repr__(self):
         return "Spm"
+
+
+
+class AveragePrecisionScore(Metric):
+    """
+    A class to calculate average precision score.
+
+    Args:
+        y_true : ndarray of shape (n_samples,) or (n_samples, n_classes)
+            True binary labels or binary label indicators.
+        y_score : ndarray of shape (n_samples,) or (n_samples, n_classes)
+            Target scores, can either be probability estimates of the positive
+            class, confidence values, or non-thresholded measure of decisions
+            (as returned by :term:`decision_function` on some classifiers).
+        average : {'micro', 'samples', 'weighted', 'macro'} or None, \
+                default='macro'
+            If ``None``, the scores for each class are returned. Otherwise,
+            this determines the type of averaging performed on the data:
+            ``'micro'``:
+                Calculate metrics globally by considering each element of the label
+                indicator matrix as a label.
+            ``'macro'``:
+                Calculate metrics for each label, and find their unweighted
+                mean.  This does not take label imbalance into account.
+            ``'weighted'``:
+                Calculate metrics for each label, and find their average, weighted
+                by support (the number of true instances for each label).
+            ``'samples'``:
+                Calculate metrics for each instance, and find their average.
+            Will be ignored when ``y_true`` is binary.
+        pos_label : int or str, default=1
+            The label of the positive class. Only applied to binary ``y_true``.
+            For multilabel-indicator ``y_true``, ``pos_label`` is fixed to 1.
+        sample_weight : array-like of shape (n_samples,), default=None
+            Sample weights.
+
+    Returns:
+        average_precision : float
+
+    References:
+        [1] `Wikipedia entry for the Average precision
+           <https://en.wikipedia.org/w/index.php?title=Information_retrieval&
+           oldid=793358396#Average_precision>`_
+
+    Examples:
+        >>> from openprotein.utils import AveragePrecisionScore
+        >>> aps = AveragePrecisionScore()
+        >>> y_true = [1, 1, 0, 1]
+        >>> y_score = [0.3, 0.4, 0.2, 0.1]
+        >>> aps.(y_true, y_score)
+        0.9166666666666665
+    """
+
+    def __init__(self, average="macro", pos_label=1, sample_weight=None):
+        super().__init__()
+        self.average = average
+        self.pos_label = pos_label
+        self.sample_weight = sample_weight
+
+    def compute_once(self, true, score) -> float:
+        """
+        Calculate the average precision score for current pred and true.
+
+        Args:
+            y_true : ndarray of shape (n_samples,) or (n_samples, n_classes)
+                True binary labels or binary label indicators.
+            y_score : ndarray of shape (n_samples,) or (n_samples, n_classes)
+                Target scores, can either be probability estimates of the positive
+                class, confidence values, or non-thresholded measure of decisions
+                (as returned by :term:`decision_function` on some classifiers).
+
+        Examples:
+            >>> from openprotein.utils import AveragePrecisionScore
+            >>> aps = AveragePrecisionScore()
+            >>> y_true = [1, 1, 0, 1]
+            >>> y_score = [0.3, 0.4, 0.2, 0.1]
+            >>> aps.compute_once(y_true, y_score)
+            0.9166666666666665
+
+            """
+
+        y_score = average_precision_score(true, score)
+        return y_score
+
+    def __repr__(self):
+        return "AveragePrecisionScore"

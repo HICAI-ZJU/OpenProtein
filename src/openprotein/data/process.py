@@ -4,6 +4,10 @@ import torch
 import numpy as np
 
 
+PROTEINSEQ = ['L', 'A', 'G', 'V', 'S', 'E', 'R', 'T', 'I', 'D', 'P', 'K', 'Q', 'N', 'F', 'Y', 'M', 'H', 'W', 'C',
+                'X', 'B', 'U', 'Z', 'O', '.', '-']
+
+
 class MaskedConverter(object):
     def __init__(self, standard_toks: Sequence[str],
                  prepend_toks: Sequence[str] = ("<null_0>", "<pad>", "<eos>", "<unk>"),
@@ -126,8 +130,8 @@ class MaskedConverter(object):
         return origin_tokens, masked_tokens, target_tokens
 
     @classmethod
-    def build_convert(cls, proteinseq_toks: dict) -> "MaskedConverter":
-        standard_toks = proteinseq_toks["toks"]
+    def build_convert(cls, proteinseq: dict=None) -> "MaskedConverter":
+        standard_toks = proteinseq if proteinseq else PROTEINSEQ
         prepend_toks = ("<cls>", "<pad>", "<eos>", "<unk>")
         append_toks = ("<mask>",)
         prepend_bos = True
@@ -206,6 +210,52 @@ class MaskedConverter(object):
         return [self.tok_to_idx[tok] for tok in self.tokenize(text)]
 
 
+class TaskConvert(object):
+    """
+    Converter for tokenizing protein sequence.
+
+    Args:
+        alphabet: Dictionary from amino acids to tokens
+    """
+
+    def __init__(self, alphabet):
+        self.alphabet = alphabet
+        self.pad_idx = alphabet.padding_idx
+        self.cls_idx = alphabet.cls_idx
+        self.eos_idx = alphabet.eos_idx
+
+    def __call__(self, seqences: Sequence[Tuple[str, str]]):
+        """
+        Convert Batch to Downstream Task Needed Format.
+
+        Args:
+            a batch of proteins [sequence1, sequence2, ...]
+
+        Returns:
+            aligned tokens
+        """
+        batch_size = len(seqences)
+
+        encoded_sequences = [self.alphabet.encode(sequence) for sequence in seqences]
+        max_encoded_sequences_length = max(len(encoded_sequence) for encoded_sequence in encoded_sequences)
+        tokens = torch.empty(
+            (
+                batch_size,
+                max_encoded_sequences_length + 2,
+            ),
+            dtype=torch.int64
+        )
+        tokens.fill_(self.pad_idx)
+
+        for i, encoded_sequence in enumerate(encoded_sequences):
+            encoded_sequence = torch.tensor(encoded_sequence, dtype=torch.int64)
+            tokens[i, 0] = self.cls_idx
+            tokens[i, 1:len(encoded_sequence) + 1] = encoded_sequence
+            tokens[i, len(encoded_sequence) + 1] = self.eos_idx
+
+        return tokens
+
+
 class Alphabet(object):
     def __init__(
         self,
@@ -255,8 +305,8 @@ class Alphabet(object):
         return self.padding_idx
 
     @classmethod
-    def build_alphabet(cls, proteinseq_toks: dict) -> "Alphabet":
-        standard_toks = proteinseq_toks["toks"]
+    def build_alphabet(cls, proteinseq: dict = PROTEINSEQ) -> "Alphabet":
+        standard_toks = proteinseq if proteinseq else PROTEINSEQ
         prepend_toks = ("<cls>", "<pad>", "<eos>", "<unk>")
         append_toks = ("<mask>",)
         prepend_bos = True

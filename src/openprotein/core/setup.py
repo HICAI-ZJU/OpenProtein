@@ -3,6 +3,7 @@ import weakref
 import threading
 from collections import UserDict
 
+
 class Components(type):
     def __new__(cls, name, bases, attrs):
         obj = type.__new__(cls, name, bases, attrs)
